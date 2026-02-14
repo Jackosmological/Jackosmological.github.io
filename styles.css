@@ -37,7 +37,7 @@ body::before{
   width: 320px;
   height: 180px;
   margin-top: 18px;
-  border-radius: 10px;
+  border-radius:5px;
   overflow: hidden;
   background: transparent; /* or white if you prefer */
 }
