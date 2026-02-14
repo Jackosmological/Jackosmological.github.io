@@ -34,8 +34,8 @@ body::before{
 }
 
 .vidbox{
-  width: 960px;
-  height: 540px;
+  width: 640px;
+  height: 360px;
   margin-top: 18px;
   border-radius:10px;
   overflow: hidden;
