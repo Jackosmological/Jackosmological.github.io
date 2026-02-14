@@ -1,47 +1,53 @@
 :root{
-  --a4-width: min(1100px, 100vw);   /* width of the background on screen */
-  --a4-aspect: 1.414;               /* A-series paper aspect ratio */
+  --a4-width: min(1100px, 100vw);
+  --a4-aspect: 1.414;                 /* A-series ratio */
   --a4-height: calc(var(--a4-width) * var(--a4-aspect));
 }
 
 html, body{
   margin:0;
   min-height:100%;
-  background:#ffffff;               /* fallback */
+  background:#ffffff;                 /* fallback around the sheet */
   color:#000000;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 a{ color:#0033cc; }
 
-body{ position: relative; }
+body{
+  position: relative;
+}
 
-/* Background "sheet" */
-.bg{
+/* The background "sheet" (reliable layer) */
+body::before{
+  content:"";
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: var(--a4-width);
   height: var(--a4-height);
+
   background: url("background.png") top center / 100% auto no-repeat;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
 
-/* Content sits directly on top of the background */
+/* Content sits on top of the sheet */
 .wrap{
+  position: relative;
+  z-index: 1;
+
   width: var(--a4-width);
   min-height: var(--a4-height);
   margin: 0 auto;
-  padding: 48px 28px;               /* adjust to move text away from edges */
+  padding: 48px 28px;                 /* adjust to place text nicely */
 }
 
-/* Remove panel look entirely */
+/* No panels */
 .card{
   background: transparent;
   border: none;
-  border-radius: 0;
   padding: 0;
   margin: 18px 0;
 }
