@@ -6,24 +6,42 @@ html, body{
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-body{ position: relative; }
-
+/* Full-screen background */
 body::before{
   content:"";
-  position: fixed;              /* simpler + reliable */
+  position: fixed;
   inset: 0;
-  background: url("background.png") top center / contain no-repeat;
-  opacity: 0.55;
+  background: url("background.png") center / cover no-repeat; /* edge-to-edge */
+  opacity: 0.6;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Dark overlay for readability */
+body::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background: rgba(11,15,23,.55);
   z-index: -1;
   pointer-events: none;
 }
 
-/* content layout */
+/* Full-width layout + scrolling */
 main{
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 0 16px;
-  min-height: 140vh; /* TEMP so you can scroll and see more of the image */
+  width: 100%;
+  padding: 48px 18px;
+}
+
+/* Optional: readable content panel while still full-width page */
+.content{
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(17,24,39,.75);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  padding: 18px;
+  backdrop-filter: blur(6px);
 }
 
 a{ color:#93c5fd; }
