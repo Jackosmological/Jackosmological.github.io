@@ -41,7 +41,12 @@ body::before{
   width: var(--a4-width);
   min-height: var(--a4-height);
   margin: 0 auto;
-  padding: 48px 28px;                 /* adjust to place text nicely */
+
+  /* move text into the drawn box */
+  padding: 0;                 /* remove old padding */
+  padding-top: 260px;         /* move down */
+  padding-left: 120px;        /* move right */
+  padding-right: 28px;
 }
 
 /* No panels */
