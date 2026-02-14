@@ -1,23 +1,34 @@
+:root{
+  --a4-width: min(1100px, 100vw);      /* how wide the drawing appears */
+  --a4-aspect: 1.414;                  /* A-series paper aspect ratio (sqrt(2)) */
+  --a4-height: calc(var(--a4-width) * var(--a4-aspect));
+}
+
 html, body{
   margin:0;
   min-height:100%;
-  background:#ffffff; /* fallback */
+  background:#ffffff;                  /* fallback */
   color:#000000;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 a{ color:#0033cc; }
 
-/* Full-width background image (no side cropping) */
-.bg{
-  position: fixed;
-  inset: 0;
-  z-index: -1;
+body{
+  position: relative;
+}
 
-  background-image: url("background.png");
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100% auto;   /* key: fill horizontally */
+/* Background "sheet" that scrolls with the page */
+.bg{
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--a4-width);
+  height: var(--a4-height);
+
+  background: url("background.png") top center / 100% auto no-repeat;
+  z-index: -1;
   pointer-events: none;
 }
 
@@ -26,18 +37,14 @@ a{ color:#0033cc; }
   max-width: 900px;
   margin: 0 auto;
   padding: 48px 18px;
+  min-height: var(--a4-height);        /* ensures you can scroll down the whole sheet */
 }
 
-/* Make text readable without overlay by giving it a light panel */
+/* Readable text panels */
 .card{
   background: rgba(255,255,255,.82);
   border: 1px solid rgba(0,0,0,.10);
   border-radius: 16px;
   padding: 18px;
   margin: 14px 0;
-}
-
-/* Optional: remove later once you have enough content to scroll */
-.spacer{
-  height: 120vh;
 }
