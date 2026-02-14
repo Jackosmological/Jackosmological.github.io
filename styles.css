@@ -6,9 +6,10 @@ body{
 
 body::before{
   content:"";
-  position: fixed;
-  inset: 0;
+  position: absolute;   /* was fixed */
+  top: 0; left: 0; right: 0; bottom: 0;
   background: url("background.png") top center / 1100px auto no-repeat;
   opacity: 0.55;
   z-index: -2;
+  pointer-events: none;
 }
