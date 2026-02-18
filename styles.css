@@ -21,23 +21,23 @@
   --sy: 8%;
   --sw: 78%;
   --sh: 78%;
+
+  /* ✅ Make ONLY the default pres videos smaller (as a % of the screen box) */
+  --pres-scale: 0.82;
 }
 
 html, body{
   margin:0;
   min-height:100%;
-  background:#ffffff;                 /* fallback around the sheet */
+  background:#ffffff;
   color:#000000;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 a{ color:#0033cc; }
 
-body{
-  position: relative;
-}
+body{ position: relative; }
 
-/* The background "sheet" (reliable layer) */
 body::before{
   content:"";
   position: absolute;
@@ -46,52 +46,28 @@ body::before{
   transform: translateX(-50%);
   width: var(--a4-width);
   height: var(--a4-height);
-
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
 }
 
-/* Content sits on top of the sheet */
 .wrap{
   position: relative;
   z-index: 1;
-
   width: var(--a4-width);
   min-height: var(--a4-height);
   margin: 0 auto;
-
-  /* move text into the drawn box */
   padding: 0;
   padding-top: 260px;
   padding-left: 120px;
   padding-right: 28px;
 }
 
-/* No panels */
 .card{
   background: transparent;
   border: none;
   padding: 0;
   margin: 18px 0;
-}
-
-/* =========================
-   OLD VIDEO BOX (keep, but you can remove if not used)
-   ========================= */
-.vidbox{
-  width: 640px;
-  height: 360px;
-  margin-top: 18px;
-  border-radius:10px;
-  overflow: hidden;
-  background: transparent;
-}
-.vidbox video{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
 }
 
 /* =========================
@@ -101,16 +77,13 @@ body::before{
   position:absolute;
   left: calc((100vw - var(--a4-width))/2 + (var(--tv-left) * 1%));
   top:  calc(var(--tv-top) * 1%);
-
   transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
-
   width: var(--tv-width);
   z-index: 5;
   pointer-events:auto;
 }
 
-/* SCREEN IMAGE (optional) */
 .tv-screen{
   position:absolute;
   left:var(--sx);
@@ -135,7 +108,14 @@ body::before{
   z-index:1;
 }
 
-/* STATIC TRANSITION VIDEO (static.mp4) */
+/* ✅ When in "pres mode" we letterbox/pillarbox by shrinking the video inside the screen */
+.pres-mode .tv-video{
+  object-fit:contain; /* prevents cropping */
+  transform: scale(var(--pres-scale));
+  transform-origin:center center;
+}
+
+/* STATIC TRANSITION VIDEO */
 .tv-static-video{
   position:absolute;
   left:var(--sx);
@@ -148,7 +128,6 @@ body::before{
   pointer-events:none;
   transition:opacity .4s ease;
 }
-
 .static-on .tv-static-video{ opacity:1; }
 
 /* SCANLINES */
@@ -230,7 +209,6 @@ body::before{
   pointer-events:auto;
 }
 
-/* Small vertical buttons (1–5) */
 #v1,#v2,#v3,#v4,#v5{
   width:14px;
   height:14px;
@@ -241,14 +219,12 @@ body::before{
   transform:translate(-50%,-50%);
 }
 
-/* Positions (same layout as before; adjust if needed) */
 #v1{ --l:79.8%; --t:55.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v2{ --l:79.8%; --t:60.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v3{ --l:79.8%; --t:65.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v4{ --l:79.8%; --t:70.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v5{ --l:79.8%; --t:75.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 
-/* Default button */
 #vDefault{
   width:48px;
   height:48px;
@@ -268,5 +244,6 @@ body::before{
     --tv-width: 340px;
     --tv-left: 60%;
     --tv-top: 72%;
+    --pres-scale: 0.82;
   }
 }
