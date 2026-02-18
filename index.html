@@ -1,4 +1,4 @@
-<!-- index.html — FULL copy/paste -->
+<!-- index.html — FULL copy/paste (unchanged from your last working one) -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -39,7 +39,6 @@
         <p><a href="mailto:jack.henqcd@gmail.com">jack.henqcd@gmail.com</a></p>
       </section>
 
-      <!-- TV RIG (Idle removed). Default plays pres.mp4 then pres2.mp4 back-to-back. -->
       <div class="tv" id="tv">
 
         <img class="tv-screen" src="screen.png" alt="">
@@ -171,9 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(async () => {
       setVideoSrc(src);
-
       try{ await video.play(); }catch(e){}
-
       stopStatic();
       switching = false;
     }, DELAY_BEFORE_NEW_VIDEO_MS);
