@@ -39,46 +39,31 @@
         <p><a href="mailto:jack.henqcd@gmail.com">jack.henqcd@gmail.com</a></p>
       </section>
 
-      <!-- Optional old standalone video (remove if you don't want it) -->
-      <!--
-      <div class="vidbox">
-        <video autoplay loop muted playsinline>
-          <source src="videowebsite.mp4" type="video/mp4" />
-        </video>
-      </div>
-      -->
-
       <!-- TV RIG (Idle removed). Default plays pres.mp4 then pres2.mp4 back-to-back. -->
       <div class="tv" id="tv">
 
-        <!-- optional screen texture -->
         <img class="tv-screen" src="screen.png" alt="">
 
-        <!-- Static transition layer -->
         <video class="tv-static-video" id="staticVideo" loop playsinline muted preload="auto">
           <source src="static.mp4" type="video/mp4">
         </video>
 
-        <!-- Main video (default playlist pres.mp4 -> pres2.mp4) -->
         <video class="tv-video" id="video" autoplay muted playsinline preload="metadata"></video>
 
         <button class="play-btn" id="playBtn" aria-label="Play/Pause" type="button"></button>
 
         <img class="tv-frame" src="tv.png" alt="">
 
-        <!-- Invisible click targets (vid1..vid5) -->
         <button class="vid-btn" id="v1" data-src="vid1.mp4" aria-label="Play vid 1" type="button">1</button>
         <button class="vid-btn" id="v2" data-src="vid2.mp4" aria-label="Play vid 2" type="button">2</button>
         <button class="vid-btn" id="v3" data-src="vid3.mp4" aria-label="Play vid 3" type="button">3</button>
         <button class="vid-btn" id="v4" data-src="vid4.mp4" aria-label="Play vid 4" type="button">4</button>
         <button class="vid-btn" id="v5" data-src="vid5.mp4" aria-label="Play vid 5" type="button">5</button>
 
-        <!-- Default button: returns to pres playlist -->
         <button class="vid-btn" id="vDefault" data-src="__DEFAULT__" aria-label="Play default presentation" type="button">DEFAULT</button>
 
       </div>
 
-      <!-- Static audio for transitions -->
       <audio id="staticAudio" loop preload="auto">
         <source src="static.mp3" type="audio/mpeg">
       </audio>
@@ -96,28 +81,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("playBtn");
   const staticAudio = document.getElementById("staticAudio");
 
-  // Default playlist (back-to-back, no delay)
   const DEFAULT_PLAYLIST = ["pres.mp4", "pres2.mp4"];
   let playlist = DEFAULT_PLAYLIST.slice();
   let playlistIndex = 0;
 
   let switching = false;
 
-  // timing (same vibe as your old rig)
   const DELAY_BEFORE_NEW_VIDEO_MS = 900;
   const QUICK_FADE_MS = 400;
 
-  // Ensure we have a <source> in the video tag
   const sourceEl = document.createElement("source");
   sourceEl.type = "video/mp4";
   video.appendChild(sourceEl);
 
+  function isPres(src){
+    return src === "pres.mp4" || src === "pres2.mp4";
+  }
+
+  function setPresMode(on){
+    if(on) tv.classList.add("pres-mode");
+    else tv.classList.remove("pres-mode");
+  }
+
   function setVideoSrc(src){
+    setPresMode(isPres(src));
     sourceEl.setAttribute("src", src);
     video.load();
   }
 
-  // TV static audio fade helper
   let fadeRAF = null;
   function fadeAudioTo(target, ms){
     cancelAnimationFrame(fadeRAF);
@@ -132,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fadeRAF = requestAnimationFrame(tick);
   }
 
-  // Autoplay policies: start muted; unmute on first user gesture
   let unlocked = false;
   function unlockAudio(){
     if(unlocked) return;
@@ -182,42 +172,35 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(async () => {
       setVideoSrc(src);
 
-      try{
-        // keep muted until user hits play; this helps autoplay succeed
-        await video.play();
-      }catch(e){}
+      try{ await video.play(); }catch(e){}
 
       stopStatic();
       switching = false;
     }, DELAY_BEFORE_NEW_VIDEO_MS);
   }
 
-  // Default playlist runner
   function startDefaultPlaylist(fromBeginning=true){
     playlist = DEFAULT_PLAYLIST.slice();
     playlistIndex = fromBeginning ? 0 : playlistIndex;
+    video.loop = false;
     switchTo(playlist[playlistIndex]);
   }
 
   video.addEventListener("ended", () => {
-    // If user selected a single vidX, it loops by setting loop=true.
-    // For default playlist, we keep loop off and chain manually.
     if(video.loop) return;
 
     playlistIndex = (playlistIndex + 1) % playlist.length;
-    // no delay between pres.mp4 and pres2.mp4 (we swap immediately)
-    setVideoSrc(playlist[playlistIndex]);
+    const next = playlist[playlistIndex];
+
+    // no delay between pres.mp4 and pres2.mp4
+    setVideoSrc(next);
     video.play().catch(()=>{});
   });
 
-  // Start with default playlist (autoplay muted)
-  video.loop = false;
+  // Start muted default playlist
   startDefaultPlaylist(true);
 
-  // Play/pause button
   btn.onclick = async () => {
-    // user gesture: allow sound on main video if you want
-    // (keep this if you later add audio; currently main video is muted by default)
     if(video.paused){
       try{ await video.play(); }catch(e){}
     }else{
@@ -225,21 +208,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Clip buttons
   document.querySelectorAll(".vid-btn").forEach(b => {
     b.addEventListener("click", async (e) => {
       e.stopPropagation();
-
       const src = b.dataset.src;
 
       if(src === "__DEFAULT__"){
-        video.loop = false;
         startDefaultPlaylist(true);
         return;
       }
 
       if(src){
-        video.loop = true;           // user clips loop
+        video.loop = true;
         await switchTo(src);
       }
     });
