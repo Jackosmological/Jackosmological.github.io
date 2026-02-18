@@ -10,10 +10,10 @@
 
   /* =========================
      TV RIG CONTROLS (move/size here)
-     ✅ centered on the sheet (and thus centered on screen)
+     ✅ NOW centered on the WHOLE WEBSITE (viewport), not the A4 sheet math
      ========================= */
-  --tv-left: 50%;
-  --tv-top: 64%;
+  --tv-left: 50vw;
+  --tv-top: 50vh;
   --tv-width: 520px;
   --tv-scale: 1;
 
@@ -25,8 +25,8 @@
 
   /* ✅ pres.mp4 + pres2.mp4 adjustments */
   --pres-scale: 0.92;        /* overall fit */
-  --pres-shift-px: -20px;    /* 10px left relative to tv.png */
-  --pres-stretch-y: 1.20;    /* +10% vertical stretch */
+  --pres-shift-px: -20px;    /* 20px left relative to tv.png */
+  --pres-stretch-y: 1.20;    /* +20% vertical stretch */
 }
 
 html, body{
@@ -77,20 +77,18 @@ body::before{
 }
 
 /* =========================
-   TV RIG (inside the A4 sheet)
+   TV RIG (CENTERED ON THE WEBSITE)
    ========================= */
 .tv{
-  position:absolute;
-
-  /* ✅ This centers it within the A4 sheet on screen */
-  left: calc((100vw - var(--a4-width))/2 + (var(--tv-left) * 1%));
-  top:  calc(var(--tv-top) * 1%);
+  position: fixed; /* ✅ pin to viewport center */
+  left: var(--tv-left);
+  top:  var(--tv-top);
 
   transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
   width: var(--tv-width);
-  z-index: 5;
+  z-index: 50;     /* above sheet + text */
   pointer-events:auto;
 }
 
@@ -119,7 +117,7 @@ body::before{
   z-index:1;
 }
 
-/* ✅ pres.mp4 + pres2.mp4: 10px left + 10% taller (relative to the TV) */
+/* pres.mp4 + pres2.mp4 tuning */
 .pres-mode .tv-video{
   object-fit:contain;
   object-position:left center;
@@ -256,8 +254,8 @@ body::before{
   :root{
     --a4-width: min(520px, 100vw);
 
-    --tv-left: 50%;
-    --tv-top: 72%;
+    --tv-left: 50vw;
+    --tv-top: 60vh;
     --tv-width: 340px;
 
     --pres-scale: 0.92;
