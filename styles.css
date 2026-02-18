@@ -10,7 +10,7 @@
 
   /* =========================
      TV RIG CONTROLS (move/size here)
-     ✅ moved into the middle of the sheet
+     ✅ centered on the sheet (and thus centered on screen)
      ========================= */
   --tv-left: 50%;
   --tv-top: 64%;
@@ -23,9 +23,10 @@
   --sw: 78%;
   --sh: 78%;
 
-  /* ✅ Default pres videos: a bit bigger + nudged left */
-  --pres-scale: 0.92;
-  --pres-shift-x: -2.2%;
+  /* ✅ pres.mp4 + pres2.mp4 adjustments */
+  --pres-scale: 0.92;        /* overall fit */
+  --pres-shift-px: -10px;    /* 10px left relative to tv.png */
+  --pres-stretch-y: 1.10;    /* +10% vertical stretch */
 }
 
 html, body{
@@ -40,7 +41,7 @@ a{ color:#0033cc; }
 
 body{ position: relative; }
 
-/* The background "sheet" (reliable layer) */
+/* The background "sheet" */
 body::before{
   content:"";
   position: absolute;
@@ -68,7 +69,6 @@ body::before{
   padding-right: 28px;
 }
 
-/* No panels */
 .card{
   background: transparent;
   border: none;
@@ -82,7 +82,7 @@ body::before{
 .tv{
   position:absolute;
 
-  /* ✅ Centered relative to the sheet */
+  /* ✅ This centers it within the A4 sheet on screen */
   left: calc((100vw - var(--a4-width))/2 + (var(--tv-left) * 1%));
   top:  calc(var(--tv-top) * 1%);
 
@@ -119,11 +119,13 @@ body::before{
   z-index:1;
 }
 
-/* ✅ pres.mp4 + pres2.mp4: slightly bigger and shifted left to fit the CRT screen */
+/* ✅ pres.mp4 + pres2.mp4: 10px left + 10% taller (relative to the TV) */
 .pres-mode .tv-video{
-  object-fit:contain;                 /* no cropping */
-  object-position:left center;        /* bias the visible area left */
-  transform: translateX(var(--pres-shift-x)) scale(var(--pres-scale));
+  object-fit:contain;
+  object-position:left center;
+  transform:
+    translateX(var(--pres-shift-px))
+    scale(var(--pres-scale), calc(var(--pres-scale) * var(--pres-stretch-y)));
   transform-origin:center center;
 }
 
@@ -221,7 +223,6 @@ body::before{
   pointer-events:auto;
 }
 
-/* Small vertical buttons (1–5) */
 #v1,#v2,#v3,#v4,#v5{
   width:14px;
   height:14px;
@@ -232,14 +233,12 @@ body::before{
   transform:translate(-50%,-50%);
 }
 
-/* Positions (same as before; adjust if needed) */
 #v1{ --l:79.8%; --t:55.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v2{ --l:79.8%; --t:60.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v3{ --l:79.8%; --t:65.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v4{ --l:79.8%; --t:70.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 #v5{ --l:79.8%; --t:75.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
 
-/* Default button */
 #vDefault{
   width:48px;
   height:48px;
@@ -257,13 +256,12 @@ body::before{
   :root{
     --a4-width: min(520px, 100vw);
 
-    /* keep centered on small screens */
     --tv-left: 50%;
     --tv-top: 72%;
     --tv-width: 340px;
 
-    /* keep pres fit on mobile */
     --pres-scale: 0.92;
-    --pres-shift-x: -2.2%;
+    --pres-shift-px: -10px;
+    --pres-stretch-y: 1.10;
   }
 }
