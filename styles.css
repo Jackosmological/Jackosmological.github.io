@@ -25,7 +25,7 @@
 
   /* ✅ pres.mp4 + pres2.mp4 adjustments */
   --pres-scale: 0.92;        /* overall fit */
-  --pres-shift-px: -10px;    /* 10px left relative to tv.png */
+  --pres-shift-px: -20px;    /* 10px left relative to tv.png */
   --pres-stretch-y: 1.20;    /* +10% vertical stretch */
 }
 
