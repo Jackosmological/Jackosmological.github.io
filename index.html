@@ -1,4 +1,4 @@
-<!-- index.html — FULL copy/paste (unchanged from your last working one) -->
+<!-- index.html — FULL copy/paste (same as your last working file) -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -189,12 +189,10 @@ document.addEventListener("DOMContentLoaded", () => {
     playlistIndex = (playlistIndex + 1) % playlist.length;
     const next = playlist[playlistIndex];
 
-    // no delay between pres.mp4 and pres2.mp4
     setVideoSrc(next);
     video.play().catch(()=>{});
   });
 
-  // Start muted default playlist
   startDefaultPlaylist(true);
 
   btn.onclick = async () => {
