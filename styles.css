@@ -1,23 +1,11 @@
 /* styles.css — FULL copy/paste */
 
 :root{
-  /* =========================
-     BACKGROUND HEIGHT (set by JS to actual rendered image height)
-     ========================= */
-  --bg-h: 100vh; /* fallback until background.png loads */
+  /* ✅ set by JS */
+  --bg-h: 100vh;        /* background.png rendered height */
+  --tv-top-px: 50vh;    /* tv center Y in px (derived from bg height) */
 
-  /* =========================
-     A4 WIDTH (centered wrapper width)
-     ========================= */
-  --a4-width: min(1100px, 100vw);
-
-  /* =========================
-     TV RIG CONTROLS
-     ✅ center relative to the PNG area (the wrapper), not the viewport
-     ========================= */
-  --tv-left: 50%;
-  --tv-top: calc(50% + 75vh - 10vh);
-
+  /* TV sizing */
   --tv-width: 520px;
   --tv-scale: 1.5;
 
@@ -36,7 +24,7 @@
 html, body{
   margin:0;
 
-  /* ✅ page ends exactly at background image rendered height */
+  /* ✅ page ends exactly at the background image height */
   height: var(--bg-h);
   min-height: var(--bg-h);
 
@@ -50,7 +38,7 @@ html, body{
 
 body{ position: relative; }
 
-/* FULL-WIDTH BACKGROUND */
+/* FULL-WIDTH BACKGROUND (fills horizontally; height matches actual rendered image height) */
 body::before{
   content:"";
   position: absolute;
@@ -63,36 +51,31 @@ body::before{
   pointer-events: none;
 }
 
-/* wrapper stays same size as background; padding won't increase height */
+/* wrapper matches background height so scroll ends exactly at PNG bottom */
 .wrap{
   position: relative;
   z-index: 1;
 
-  width: var(--a4-width);
+  width: 100%;
   height: var(--bg-h);
   min-height: var(--bg-h);
 
-  margin: 0 auto;
+  margin: 0;
 
   box-sizing: border-box;
-
   padding: 0;
-  padding-top: 260px;
-  padding-left: 120px;
-  padding-right: 28px;
 }
 
 /* =========================
-   TV RIG (✅ centered within the PNG area)
+   TV RIG
+   ✅ centered in the PNG (which is centered in the viewport)
    ========================= */
 .tv{
   position: absolute;
 
-  /* ✅ use wrap (PNG area) as reference */
-  left: var(--tv-left);
-  top:  var(--tv-top);
+  left: 50vw;              /* ✅ center horizontally in the PNG */
+  top:  var(--tv-top-px);  /* ✅ tied to PNG height so it hits your drawn box */
 
-  /* ✅ true centering */
   transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
@@ -261,11 +244,6 @@ body::before{
 /* Mobile tweaks */
 @media (max-width: 520px){
   :root{
-    --a4-width: min(520px, 100vw);
-
-    --tv-left: 50%;
-    --tv-top: calc(60% + 60vh - 10vh);
-
     --tv-width: 340px;
     --tv-scale: 1.5;
 
