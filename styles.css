@@ -10,7 +10,7 @@
 
   /* =========================
      TV RIG CONTROLS (move/size here)
-     ✅ NOW centered on the WHOLE WEBSITE (viewport), not the A4 sheet math
+     ✅ NOW centered on the WHOLE WEBSITE (viewport)
      ========================= */
   --tv-left: 50vw;
   --tv-top: 50vh;
@@ -41,21 +41,20 @@ a{ color:#0033cc; }
 
 body{ position: relative; }
 
-/* The background "sheet" */
+/* ✅ FULL-WIDTH BACKGROUND (fills the screen horizontally) */
 body::before{
   content:"";
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--a4-width);
-  height: var(--a4-height);
+  left: 0;
+  width: 100vw;         /* fill horizontally */
+  height: 100vh;        /* viewport height (so it behaves like a true background layer) */
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
 }
 
-/* Content sits on top of the sheet */
+/* Content sits on top of the background */
 .wrap{
   position: relative;
   z-index: 1;
@@ -88,7 +87,7 @@ body::before{
   transform-origin: center center;
 
   width: var(--tv-width);
-  z-index: 50;     /* above sheet + text */
+  z-index: 50;     /* above background + text */
   pointer-events:auto;
 }
 
