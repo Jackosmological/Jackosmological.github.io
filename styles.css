@@ -8,9 +8,6 @@
 
   /* =========================
      ✅ MANUAL TV POSITION SETTINGS
-     Change these any time:
-     - X: positive moves right, negative moves left
-     - Y: positive moves down, negative moves up
      ========================= */
   --tv-x: 0px;
   --tv-y: -140px;
@@ -29,6 +26,17 @@
   --pres-scale: 0.92;
   --pres-shift-px: -20px;
   --pres-stretch-y: 1.20;
+
+  /* =========================
+     ✅ LINK PNG CONTROLS (edit these)
+     ========================= */
+  --link-opacity: 0.5;
+
+  --link1-x: 100px; --link1-y: 100px; --link1-w: 140px;
+  --link2-x: 260px; --link2-y: 100px; --link2-w: 140px;
+  --link3-x: 420px; --link3-y: 100px; --link3-w: 140px;
+  --link4-x: 580px; --link4-y: 100px; --link4-w: 140px;
+  --link5-x: 740px; --link5-y: 100px; --link5-w: 140px;
 }
 
 html, body{
@@ -67,6 +75,22 @@ body::before{
   box-sizing: border-box;
   padding: 0;
 }
+
+/* ✅ NEW: shared styling for link PNGs */
+.link-png{
+  position: absolute;
+  opacity: var(--link-opacity);
+  z-index: 40;           /* behind TV (50), above background (0) */
+  pointer-events: none;  /* set to auto later if you want clickable */
+  height: auto;
+}
+
+/* ✅ Individual positioning + sizing */
+#link1{ left: var(--link1-x); top: var(--link1-y); width: var(--link1-w); }
+#link2{ left: var(--link2-x); top: var(--link2-y); width: var(--link2-w); }
+#link3{ left: var(--link3-x); top: var(--link3-y); width: var(--link3-w); }
+#link4{ left: var(--link4-x); top: var(--link4-y); width: var(--link4-w); }
+#link5{ left: var(--link5-x); top: var(--link5-y); width: var(--link5-w); }
 
 /* ✅ TV position uses the manual offsets */
 .tv{
