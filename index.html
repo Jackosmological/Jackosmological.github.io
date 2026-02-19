@@ -10,36 +10,8 @@
 
   <body>
     <main class="wrap">
-      <header class="card">
-        <h1>Jack Henderson</h1>
-        <p>
-          WEBSITE UNDER CONSTRUCTION;
-          Physics PhD applicant — interested in early universe cosmology, quantum information
-          theory, quantum gravity.
-        </p>
-      </header>
-
-      <section class="card">
-        <h2>Research</h2>
-        <ul>
-          <li>MSc (merit) — Particle and Nuclear Physics — The University of Edinburgh</li>
-          <li>
-            Dissertation: The effects of Chern-Simons gravity on inflationary squeezed states in the
-            early universe
-          </li>
-          <li>BSc (Hons) — Physics — Heriot-Watt University</li>
-          <li>
-            Final Project: High-dimensional entanglement verification via Quantum Fisher Information
-          </li>
-        </ul>
-      </section>
-
-      <section class="card">
-        <h2>Contact</h2>
-        <p><a href="mailto:jack.henqcd@gmail.com">jack.henqcd@gmail.com</a></p>
-      </section>
-
       <div class="tv" id="tv">
+
         <img class="tv-screen" src="screen.png" alt="">
 
         <video class="tv-static-video" id="staticVideo" loop playsinline muted preload="auto">
@@ -61,6 +33,7 @@
         <button class="vid-btn" id="vDefault" data-src="__DEFAULT__" aria-label="Play default presentation" type="button">
           DEFAULT
         </button>
+
       </div>
 
       <audio id="staticAudio" loop preload="auto">
@@ -143,7 +116,7 @@
             staticAudio.volume = 0;
             staticAudio.play().catch(()=>{});
           }
-          fadeAudioTo(0.6, QUICK_FADE_MS);
+          fadeAudioTo(0.3, QUICK_FADE_MS); // ✅ half of previous (0.6 → 0.3)
         }
 
         function stopStatic(){
