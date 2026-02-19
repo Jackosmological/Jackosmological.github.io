@@ -44,6 +44,8 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
 
+        const tv = document.getElementById("tv");
+
         /* =========================
            ✅ PAGE ENDS AT ACTUAL background.png HEIGHT
            AND TV Y POSITION IS TIED TO THAT SAME HEIGHT
@@ -51,8 +53,17 @@
         const bg = new Image();
         bg.src = "background.png";
 
-        // tweak this ONE number if you want the TV higher/lower
-        const TV_CENTER_Y_FRACTION_OF_BG = 0.35; // 0.35 = higher; 0.45 = lower
+        // Base vertical anchor (where you had it before)
+        const TV_CENTER_Y_FRACTION_OF_BG = 0.35;
+
+        // ✅ move down by 1.05 × its (scaled) height
+        const TV_DOWN_MULTIPLE_OF_HEIGHT = 1.05;
+
+        function getCssNumber(varName, fallback){
+          const v = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+          const n = parseFloat(v);
+          return Number.isFinite(n) ? n : fallback;
+        }
 
         function setBgVars(){
           if(!bg.naturalWidth || !bg.naturalHeight) return;
@@ -62,17 +73,39 @@
 
           document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
           document.documentElement.style.setProperty("--tv-top-px", `${Math.round(renderedH * TV_CENTER_Y_FRACTION_OF_BG)}px`);
+
+          // after bg vars set, also compute TV down-shift
+          requestAnimationFrame(setTvDownShift);
+        }
+
+        function setTvDownShift(){
+          // tv offsetHeight is unscaled; multiply by the current CSS scale
+          const tvScale = getCssNumber("--tv-scale", 1);
+          const unscaledH = tv.offsetHeight || 0;
+          const scaledH = unscaledH * tvScale;
+
+          const downPx = Math.round(scaledH * TV_DOWN_MULTIPLE_OF_HEIGHT);
+          document.documentElement.style.setProperty("--tv-down-px", `${downPx}px`);
         }
 
         bg.addEventListener("load", setBgVars);
-        window.addEventListener("resize", setBgVars, { passive: true });
+        window.addEventListener("resize", () => {
+          setBgVars();
+          // also re-measure TV (in case width/scale changes on resize)
+          requestAnimationFrame(setTvDownShift);
+        }, { passive: true });
+
         if(bg.complete) setBgVars();
+
+        // also measure once after layout settles (fonts/images)
+        window.addEventListener("load", () => {
+          setBgVars();
+          setTvDownShift();
+        });
 
         /* =========================
            TV logic (static volume already halved)
            ========================= */
-        const tv = document.getElementById("tv");
-
         const video = document.getElementById("video");
         const staticVideo = document.getElementById("staticVideo");
 
@@ -143,7 +176,7 @@
             staticAudio.volume = 0;
             staticAudio.play().catch(()=>{});
           }
-          fadeAudioTo(0.3, QUICK_FADE_MS); // ✅ half volume
+          fadeAudioTo(0.3, QUICK_FADE_MS);
         }
 
         function stopStatic(){
