@@ -9,13 +9,19 @@
   --a4-height: calc(var(--a4-width) * var(--a4-aspect));
 
   /* =========================
-     TV RIG CONTROLS (move/size here)
-     ✅ centered on the WHOLE WEBSITE (viewport)
+     TV RIG CONTROLS (anchored to background/document now)
      ========================= */
   --tv-left: 50vw;
-  --tv-top: calc(50vh + 75vh); /* ✅ move DOWN by 1.5 * its (scaled) height */
+
+  /* ✅ was: calc(50vh + 75vh)
+     Move UP by 1/10 of its height:
+     height ≈ 100vh when centered, so 1/10 height ≈ 10vh
+     => subtract 10vh
+  */
+  --tv-top: calc(50vh + 75vh - 10vh);
+
   --tv-width: 520px;
-  --tv-scale: 1.5;             /* ✅ 1.5x larger */
+  --tv-scale: 1.5;             /* 1.5x larger */
 
   /* Screen rectangle inside tv.png */
   --sx: 8%;
@@ -23,10 +29,10 @@
   --sw: 78%;
   --sh: 78%;
 
-  /* ✅ pres.mp4 + pres2.mp4 adjustments */
-  --pres-scale: 0.92;        /* overall fit */
-  --pres-shift-px: -20px;    /* 20px left relative to tv.png */
-  --pres-stretch-y: 1.20;    /* +20% vertical stretch */
+  /* pres.mp4 + pres2.mp4 adjustments */
+  --pres-scale: 0.92;
+  --pres-shift-px: -20px;
+  --pres-stretch-y: 1.20;
 }
 
 html, body{
@@ -41,15 +47,14 @@ a{ color:#0033cc; }
 
 body{ position: relative; }
 
-/* ✅ FULL-WIDTH BACKGROUND (fills the screen horizontally)
-   ✅ SCROLLABLE: height is image height, not locked to viewport */
+/* ✅ FULL-WIDTH BACKGROUND (scrollable) */
 body::before{
   content:"";
-  position: absolute;     /* ✅ was fixed */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: max(100vh, var(--a4-height)); /* ✅ allow scrolling to bottom of image */
+  height: max(100vh, var(--a4-height));
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
@@ -77,10 +82,10 @@ body::before{
 }
 
 /* =========================
-   TV RIG (CENTERED ON THE WEBSITE)
+   TV RIG (✅ STICKS TO BACKGROUND / SCROLLS WITH PAGE)
    ========================= */
 .tv{
-  position: fixed; /* pin to viewport */
+  position: absolute;  /* ✅ was fixed — now moves with the background/image */
   left: var(--tv-left);
   top:  var(--tv-top);
 
@@ -255,7 +260,7 @@ body::before{
     --a4-width: min(520px, 100vw);
 
     --tv-left: 50vw;
-    --tv-top: calc(60vh + 60vh); /* keep it pushed down on mobile too */
+    --tv-top: calc(60vh + 60vh - 10vh); /* keep the same "up 1/10 height" idea */
     --tv-width: 340px;
     --tv-scale: 1.5;
 
