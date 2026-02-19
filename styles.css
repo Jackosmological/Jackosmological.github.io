@@ -10,12 +10,12 @@
 
   /* =========================
      TV RIG CONTROLS (move/size here)
-     ✅ NOW centered on the WHOLE WEBSITE (viewport)
+     ✅ centered on the WHOLE WEBSITE (viewport)
      ========================= */
   --tv-left: 50vw;
-  --tv-top: 50vh;
+  --tv-top: calc(50vh + 75vh); /* ✅ move DOWN by 1.5 * its (scaled) height */
   --tv-width: 520px;
-  --tv-scale: 1;
+  --tv-scale: 1.5;             /* ✅ 1.5x larger */
 
   /* Screen rectangle inside tv.png */
   --sx: 8%;
@@ -41,14 +41,15 @@ a{ color:#0033cc; }
 
 body{ position: relative; }
 
-/* ✅ FULL-WIDTH BACKGROUND (fills the screen horizontally) */
+/* ✅ FULL-WIDTH BACKGROUND (fills the screen horizontally)
+   ✅ SCROLLABLE: height is image height, not locked to viewport */
 body::before{
   content:"";
-  position: fixed;
+  position: absolute;     /* ✅ was fixed */
   top: 0;
   left: 0;
-  width: 100vw;         /* fill horizontally */
-  height: 100vh;        /* viewport height (so it behaves like a true background layer) */
+  width: 100vw;
+  height: max(100vh, var(--a4-height)); /* ✅ allow scrolling to bottom of image */
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
@@ -79,7 +80,7 @@ body::before{
    TV RIG (CENTERED ON THE WEBSITE)
    ========================= */
 .tv{
-  position: fixed; /* ✅ pin to viewport center */
+  position: fixed; /* pin to viewport */
   left: var(--tv-left);
   top:  var(--tv-top);
 
@@ -87,7 +88,7 @@ body::before{
   transform-origin: center center;
 
   width: var(--tv-width);
-  z-index: 50;     /* above background + text */
+  z-index: 50;
   pointer-events:auto;
 }
 
@@ -254,8 +255,9 @@ body::before{
     --a4-width: min(520px, 100vw);
 
     --tv-left: 50vw;
-    --tv-top: 60vh;
+    --tv-top: calc(60vh + 60vh); /* keep it pushed down on mobile too */
     --tv-width: 340px;
+    --tv-scale: 1.5;
 
     --pres-scale: 0.92;
     --pres-shift-px: -10px;
