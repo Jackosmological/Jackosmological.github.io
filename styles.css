@@ -31,7 +31,8 @@
 
 html, body{
   margin:0;
-  min-height:100%;
+  height: var(--a4-height); /* ✅ stop the website at the bottom of the PNG */
+  overflow: hidden;         /* ✅ prevent scrolling beyond background */
   background:#ffffff;
   color:#000000;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -39,14 +40,14 @@ html, body{
 
 body{ position: relative; }
 
-/* FULL-WIDTH BACKGROUND (scrollable) */
+/* FULL-WIDTH BACKGROUND (stops at its bottom) */
 body::before{
   content:"";
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: max(100vh, var(--a4-height));
+  height: var(--a4-height);           /* ✅ exactly the background height */
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
@@ -57,7 +58,7 @@ body::before{
   position: relative;
   z-index: 1;
   width: var(--a4-width);
-  min-height: var(--a4-height);
+  height: var(--a4-height);          /* ✅ match background exactly */
   margin: 0 auto;
 
   padding: 0;
@@ -67,15 +68,17 @@ body::before{
 }
 
 /* =========================
-   TV RIG (STICKS TO BACKGROUND / SCROLLS WITH PAGE)
+   TV RIG (STICKS TO BACKGROUND)
    ========================= */
 .tv{
   position: absolute;
   left: var(--tv-left);
   top:  var(--tv-top);
 
-  /* ✅ moved LEFT by 1/8 width = 12.5% (relative to its own width) */
-  transform: translate(-62.5%, -50%) scale(var(--tv-scale));
+  /* ✅ moved LEFT by another 1/8 width (12.5%)
+     previous: -62.5%, now: -75%
+  */
+  transform: translate(-75%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
   width: var(--tv-width);
