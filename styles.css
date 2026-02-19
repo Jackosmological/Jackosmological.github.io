@@ -9,19 +9,13 @@
   --a4-height: calc(var(--a4-width) * var(--a4-aspect));
 
   /* =========================
-     TV RIG CONTROLS (anchored to background/document now)
+     TV RIG CONTROLS (anchored to background/document)
      ========================= */
   --tv-left: 50vw;
-
-  /* ✅ was: calc(50vh + 75vh)
-     Move UP by 1/10 of its height:
-     height ≈ 100vh when centered, so 1/10 height ≈ 10vh
-     => subtract 10vh
-  */
   --tv-top: calc(50vh + 75vh - 10vh);
 
   --tv-width: 520px;
-  --tv-scale: 1.5;             /* 1.5x larger */
+  --tv-scale: 1.5;
 
   /* Screen rectangle inside tv.png */
   --sx: 8%;
@@ -43,11 +37,9 @@ html, body{
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-a{ color:#0033cc; }
-
 body{ position: relative; }
 
-/* ✅ FULL-WIDTH BACKGROUND (scrollable) */
+/* FULL-WIDTH BACKGROUND (scrollable) */
 body::before{
   content:"";
   position: absolute;
@@ -74,22 +66,16 @@ body::before{
   padding-right: 28px;
 }
 
-.card{
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 18px 0;
-}
-
 /* =========================
-   TV RIG (✅ STICKS TO BACKGROUND / SCROLLS WITH PAGE)
+   TV RIG (STICKS TO BACKGROUND / SCROLLS WITH PAGE)
    ========================= */
 .tv{
-  position: absolute;  /* ✅ was fixed — now moves with the background/image */
+  position: absolute;
   left: var(--tv-left);
   top:  var(--tv-top);
 
-  transform: translate(-50%, -50%) scale(var(--tv-scale));
+  /* ✅ moved LEFT by 1/8 width = 12.5% (relative to its own width) */
+  transform: translate(-62.5%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
   width: var(--tv-width);
@@ -260,7 +246,7 @@ body::before{
     --a4-width: min(520px, 100vw);
 
     --tv-left: 50vw;
-    --tv-top: calc(60vh + 60vh - 10vh); /* keep the same "up 1/10 height" idea */
+    --tv-top: calc(60vh + 60vh - 10vh);
     --tv-width: 340px;
     --tv-scale: 1.5;
 
