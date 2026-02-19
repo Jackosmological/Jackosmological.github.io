@@ -47,16 +47,16 @@
         const tv = document.getElementById("tv");
 
         /* =========================
-           ✅ PAGE ENDS AT ACTUAL background.png HEIGHT
-           AND TV Y POSITION IS TIED TO THAT SAME HEIGHT
+           PAGE ENDS AT ACTUAL background.png HEIGHT
+           AND TV BASE POSITION TIED TO THAT HEIGHT
            ========================= */
         const bg = new Image();
         bg.src = "background.png";
 
-        // Base vertical anchor (where you had it before)
+        // Base vertical anchor you had (relative to background height)
         const TV_CENTER_Y_FRACTION_OF_BG = 0.35;
 
-        // ✅ move down by 1.05 × its (scaled) height
+        // Move down by 1.05 × its (scaled) height
         const TV_DOWN_MULTIPLE_OF_HEIGHT = 1.05;
 
         function getCssNumber(varName, fallback){
@@ -74,12 +74,10 @@
           document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
           document.documentElement.style.setProperty("--tv-top-px", `${Math.round(renderedH * TV_CENTER_Y_FRACTION_OF_BG)}px`);
 
-          // after bg vars set, also compute TV down-shift
           requestAnimationFrame(setTvDownShift);
         }
 
         function setTvDownShift(){
-          // tv offsetHeight is unscaled; multiply by the current CSS scale
           const tvScale = getCssNumber("--tv-scale", 1);
           const unscaledH = tv.offsetHeight || 0;
           const scaledH = unscaledH * tvScale;
@@ -91,13 +89,11 @@
         bg.addEventListener("load", setBgVars);
         window.addEventListener("resize", () => {
           setBgVars();
-          // also re-measure TV (in case width/scale changes on resize)
           requestAnimationFrame(setTvDownShift);
         }, { passive: true });
 
         if(bg.complete) setBgVars();
 
-        // also measure once after layout settles (fonts/images)
         window.addEventListener("load", () => {
           setBgVars();
           setTvDownShift();
