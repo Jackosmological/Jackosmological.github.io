@@ -2,14 +2,12 @@
 
 :root{
   /* =========================
-     BACKGROUND PNG HEIGHT (PAGE ENDS HERE)
+     BACKGROUND HEIGHT (set by JS to actual image height)
      ========================= */
-  --a4-width: min(1100px, 100vw);
-  --a4-aspect: 1.414;                 /* A-series ratio */
-  --a4-height: calc(var(--a4-width) * var(--a4-aspect));
+  --bg-h: 100vh; /* fallback until background.png loads */
 
   /* =========================
-     TV RIG CONTROLS (anchored to document/background)
+     TV RIG CONTROLS (anchored to background/document)
      ========================= */
   --tv-left: 50vw;
   --tv-top: calc(50vh + 75vh - 10vh);
@@ -31,9 +29,11 @@
 
 html, body{
   margin:0;
-  /* ✅ allow scrolling */
-  min-height: var(--a4-height);  /* page is at least the PNG height */
-  height: auto;
+
+  /* ✅ Page ends exactly at the rendered background image height */
+  min-height: var(--bg-h);
+  height: var(--bg-h);
+
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -44,14 +44,14 @@ html, body{
 
 body{ position: relative; }
 
-/* ✅ FULL-WIDTH BACKGROUND (fills horizontally, scrolls to bottom, page ends at bottom) */
+/* FULL-WIDTH BACKGROUND (fills horizontally; height matches actual rendered image height) */
 body::before{
   content:"";
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: var(--a4-height);                 /* ✅ exactly the background height */
+  height: var(--bg-h);
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
@@ -61,15 +61,12 @@ body::before{
 .wrap{
   position: relative;
   z-index: 1;
-  width: var(--a4-width);
-  min-height: var(--a4-height);
-  height: var(--a4-height);                 /* ✅ lock content height to PNG height */
-  margin: 0 auto;
+  width: 100%;
+  min-height: var(--bg-h);
+  height: var(--bg-h);
+  margin: 0;
 
   padding: 0;
-  padding-top: 260px;
-  padding-left: 120px;
-  padding-right: 28px;
 }
 
 /* =========================
@@ -249,8 +246,6 @@ body::before{
 /* Mobile tweaks */
 @media (max-width: 520px){
   :root{
-    --a4-width: min(520px, 100vw);
-
     --tv-left: 50vw;
     --tv-top: calc(60vh + 60vh - 10vh);
     --tv-width: 340px;
