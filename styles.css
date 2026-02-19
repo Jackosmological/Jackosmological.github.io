@@ -2,17 +2,17 @@
 
 :root{
   /* =========================
-     BACKGROUND HEIGHT (set by JS to actual image height)
+     BACKGROUND HEIGHT (set by JS to actual rendered image height)
      ========================= */
   --bg-h: 100vh; /* fallback until background.png loads */
 
   /* =========================
-     A4 WIDTH (used for your centered layout width)
+     A4 WIDTH (centered wrapper width)
      ========================= */
   --a4-width: min(1100px, 100vw);
 
   /* =========================
-     TV RIG CONTROLS (anchored to background/document)
+     TV RIG CONTROLS
      ========================= */
   --tv-left: 50vw;
   --tv-top: calc(50vh + 75vh - 10vh);
@@ -35,7 +35,7 @@
 html, body{
   margin:0;
 
-  /* ✅ Page ends exactly at the rendered background image height */
+  /* ✅ page ends exactly at background image rendered height */
   height: var(--bg-h);
   min-height: var(--bg-h);
 
@@ -49,7 +49,7 @@ html, body{
 
 body{ position: relative; }
 
-/* FULL-WIDTH BACKGROUND (fills horizontally; height matches actual rendered image height) */
+/* FULL-WIDTH BACKGROUND */
 body::before{
   content:"";
   position: absolute;
@@ -62,7 +62,7 @@ body::before{
   pointer-events: none;
 }
 
-/* ✅ Restore your original centered wrapper, BUT keep it from increasing page height */
+/* wrapper stays same size as background; padding won't increase height */
 .wrap{
   position: relative;
   z-index: 1;
@@ -73,10 +73,8 @@ body::before{
 
   margin: 0 auto;
 
-  /* ✅ critical: padding is included inside height, so page won't exceed PNG height */
   box-sizing: border-box;
 
-  /* keep your old padding values (won't add extra height now) */
   padding: 0;
   padding-top: 260px;
   padding-left: 120px;
@@ -84,15 +82,15 @@ body::before{
 }
 
 /* =========================
-   TV RIG (sticks to background/document)
+   TV RIG (✅ centered again)
    ========================= */
 .tv{
   position: absolute;
   left: var(--tv-left);
   top:  var(--tv-top);
 
-  /* ✅ EXACT current position you liked */
-  transform: translate(-75%, -50%) scale(var(--tv-scale));
+  /* ✅ CENTERED */
+  transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
   width: var(--tv-width);
