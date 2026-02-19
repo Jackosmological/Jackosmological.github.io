@@ -4,7 +4,16 @@
   /* ✅ set by JS */
   --bg-h: 100vh;
   --tv-top-px: 50vh;   /* base TV center Y (px) */
-  --tv-down-px: 0px;   /* ✅ extra downward shift = 1.05×TV height (set by JS) */
+  --tv-down-px: 0px;   /* extra downward shift (set by JS) */
+
+  /* =========================
+     ✅ MANUAL TV POSITION SETTINGS
+     Change these any time:
+     - X: positive moves right, negative moves left
+     - Y: positive moves down, negative moves up
+     ========================= */
+  --tv-x: 0px;
+  --tv-y: 0px;
 
   /* TV sizing */
   --tv-width: 520px;
@@ -36,7 +45,6 @@ html, body{
 
 body{ position: relative; }
 
-/* background.png fills horizontally; page ends at its bottom */
 body::before{
   content:"";
   position: absolute;
@@ -49,25 +57,23 @@ body::before{
   pointer-events: none;
 }
 
-/* wrapper matches background height */
 .wrap{
   position: relative;
   z-index: 1;
-
   width: 100%;
   height: var(--bg-h);
   min-height: var(--bg-h);
-
   margin: 0;
   box-sizing: border-box;
   padding: 0;
 }
 
-/* TV centered horizontally in the PNG; moved down by 1.05×its height */
+/* ✅ TV position uses the manual offsets */
 .tv{
   position: absolute;
-  left: 50vw;
-  top: calc(var(--tv-top-px) + var(--tv-down-px));
+
+  left: calc(50vw + var(--tv-x));
+  top:  calc(var(--tv-top-px) + var(--tv-down-px) + var(--tv-y));
 
   transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
@@ -77,7 +83,7 @@ body::before{
   pointer-events:auto;
 }
 
-/* optional screen texture */
+/* (rest unchanged) */
 .tv-screen{
   position:absolute;
   left:var(--sx);
@@ -90,7 +96,6 @@ body::before{
   pointer-events:none;
 }
 
-/* MAIN VIDEO LAYER */
 .tv-video{
   position:absolute;
   left:var(--sx);
@@ -102,7 +107,6 @@ body::before{
   z-index:1;
 }
 
-/* pres.mp4 + pres2.mp4 tuning */
 .pres-mode .tv-video{
   object-fit:contain;
   object-position:left center;
@@ -112,7 +116,6 @@ body::before{
   transform-origin:center center;
 }
 
-/* STATIC TRANSITION VIDEO (static.mp4) */
 .tv-static-video{
   position:absolute;
   left:var(--sx);
@@ -127,7 +130,6 @@ body::before{
 }
 .static-on .tv-static-video{ opacity:1; }
 
-/* SCANLINES */
 .tv::before{
   content:"";
   position:absolute;
@@ -144,7 +146,6 @@ body::before{
   pointer-events:none;
 }
 
-/* FRAME */
 .tv-frame{
   width:100%;
   z-index:5;
@@ -152,7 +153,6 @@ body::before{
   pointer-events:none;
 }
 
-/* PLAY BUTTON */
 .play-btn{
   position:absolute;
   left:50%;
@@ -190,7 +190,6 @@ body::before{
   pointer-events:none;
 }
 
-/* VIDEO SELECT BUTTONS (invisible click targets) */
 .vid-btn{
   position:absolute;
   z-index:10;
@@ -234,7 +233,6 @@ body::before{
   top:calc(76.3% - 24px);
 }
 
-/* Mobile tweaks */
 @media (max-width: 520px){
   :root{
     --tv-width: 340px;
