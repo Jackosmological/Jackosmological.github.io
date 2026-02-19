@@ -45,28 +45,31 @@
       document.addEventListener("DOMContentLoaded", () => {
 
         /* =========================
-           PAGE ENDS AT ACTUAL background.png HEIGHT
-           background rendered at width = 100vw (100% auto)
-           renderedHeight = (naturalHeight/naturalWidth) * viewportWidth
+           ✅ PAGE ENDS AT ACTUAL background.png HEIGHT
+           AND TV Y POSITION IS TIED TO THAT SAME HEIGHT
            ========================= */
         const bg = new Image();
         bg.src = "background.png";
 
-        function setBgHeight(){
+        // tweak this ONE number if you want the TV higher/lower
+        const TV_CENTER_Y_FRACTION_OF_BG = 0.35; // 0.35 = higher; 0.45 = lower
+
+        function setBgVars(){
           if(!bg.naturalWidth || !bg.naturalHeight) return;
 
           const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
           const renderedH = (bg.naturalHeight / bg.naturalWidth) * vw;
 
           document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
+          document.documentElement.style.setProperty("--tv-top-px", `${Math.round(renderedH * TV_CENTER_Y_FRACTION_OF_BG)}px`);
         }
 
-        bg.addEventListener("load", setBgHeight);
-        window.addEventListener("resize", setBgHeight, { passive: true });
-        if(bg.complete) setBgHeight();
+        bg.addEventListener("load", setBgVars);
+        window.addEventListener("resize", setBgVars, { passive: true });
+        if(bg.complete) setBgVars();
 
         /* =========================
-           TV logic
+           TV logic (static volume already halved)
            ========================= */
         const tv = document.getElementById("tv");
 
@@ -140,7 +143,7 @@
             staticAudio.volume = 0;
             staticAudio.play().catch(()=>{});
           }
-          fadeAudioTo(0.3, QUICK_FADE_MS);
+          fadeAudioTo(0.3, QUICK_FADE_MS); // ✅ half volume
         }
 
         function stopStatic(){
