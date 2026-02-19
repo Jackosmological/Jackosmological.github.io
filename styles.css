@@ -13,9 +13,10 @@
 
   /* =========================
      TV RIG CONTROLS
+     ✅ center relative to the PNG area (the wrapper), not the viewport
      ========================= */
-  --tv-left: 50vw;
-  --tv-top: calc(50vh + 75vh - 10vh);
+  --tv-left: 50%;
+  --tv-top: calc(50% + 75vh - 10vh);
 
   --tv-width: 520px;
   --tv-scale: 1.5;
@@ -82,14 +83,16 @@ body::before{
 }
 
 /* =========================
-   TV RIG (✅ centered again)
+   TV RIG (✅ centered within the PNG area)
    ========================= */
 .tv{
   position: absolute;
+
+  /* ✅ use wrap (PNG area) as reference */
   left: var(--tv-left);
   top:  var(--tv-top);
 
-  /* ✅ CENTERED */
+  /* ✅ true centering */
   transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
@@ -260,8 +263,9 @@ body::before{
   :root{
     --a4-width: min(520px, 100vw);
 
-    --tv-left: 50vw;
-    --tv-top: calc(60vh + 60vh - 10vh);
+    --tv-left: 50%;
+    --tv-top: calc(60% + 60vh - 10vh);
+
     --tv-width: 340px;
     --tv-scale: 1.5;
 
