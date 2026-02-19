@@ -1,4 +1,4 @@
-<!-- index.html — FULL copy/paste (same as your last working file) -->
+<!-- index.html — FULL copy/paste -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -40,7 +40,6 @@
       </section>
 
       <div class="tv" id="tv">
-
         <img class="tv-screen" src="screen.png" alt="">
 
         <video class="tv-static-video" id="staticVideo" loop playsinline muted preload="auto">
@@ -59,169 +58,168 @@
         <button class="vid-btn" id="v4" data-src="vid4.mp4" aria-label="Play vid 4" type="button">4</button>
         <button class="vid-btn" id="v5" data-src="vid5.mp4" aria-label="Play vid 5" type="button">5</button>
 
-        <button class="vid-btn" id="vDefault" data-src="__DEFAULT__" aria-label="Play default presentation" type="button">DEFAULT</button>
-
+        <button class="vid-btn" id="vDefault" data-src="__DEFAULT__" aria-label="Play default presentation" type="button">
+          DEFAULT
+        </button>
       </div>
 
       <audio id="staticAudio" loop preload="auto">
         <source src="static.mp3" type="audio/mpeg">
       </audio>
-
     </main>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
 
-  const tv = document.getElementById("tv");
+        const tv = document.getElementById("tv");
 
-  const video = document.getElementById("video");
-  const staticVideo = document.getElementById("staticVideo");
+        const video = document.getElementById("video");
+        const staticVideo = document.getElementById("staticVideo");
 
-  const btn = document.getElementById("playBtn");
-  const staticAudio = document.getElementById("staticAudio");
+        const btn = document.getElementById("playBtn");
+        const staticAudio = document.getElementById("staticAudio");
 
-  const DEFAULT_PLAYLIST = ["pres.mp4", "pres2.mp4"];
-  let playlist = DEFAULT_PLAYLIST.slice();
-  let playlistIndex = 0;
+        const DEFAULT_PLAYLIST = ["pres.mp4", "pres2.mp4"];
+        let playlist = DEFAULT_PLAYLIST.slice();
+        let playlistIndex = 0;
 
-  let switching = false;
+        let switching = false;
 
-  const DELAY_BEFORE_NEW_VIDEO_MS = 900;
-  const QUICK_FADE_MS = 400;
+        const DELAY_BEFORE_NEW_VIDEO_MS = 900;
+        const QUICK_FADE_MS = 400;
 
-  const sourceEl = document.createElement("source");
-  sourceEl.type = "video/mp4";
-  video.appendChild(sourceEl);
+        const sourceEl = document.createElement("source");
+        sourceEl.type = "video/mp4";
+        video.appendChild(sourceEl);
 
-  function isPres(src){
-    return src === "pres.mp4" || src === "pres2.mp4";
-  }
+        function isPres(src){
+          return src === "pres.mp4" || src === "pres2.mp4";
+        }
 
-  function setPresMode(on){
-    if(on) tv.classList.add("pres-mode");
-    else tv.classList.remove("pres-mode");
-  }
+        function setPresMode(on){
+          if(on) tv.classList.add("pres-mode");
+          else tv.classList.remove("pres-mode");
+        }
 
-  function setVideoSrc(src){
-    setPresMode(isPres(src));
-    sourceEl.setAttribute("src", src);
-    video.load();
-  }
+        function setVideoSrc(src){
+          setPresMode(isPres(src));
+          sourceEl.setAttribute("src", src);
+          video.load();
+        }
 
-  let fadeRAF = null;
-  function fadeAudioTo(target, ms){
-    cancelAnimationFrame(fadeRAF);
-    const startVol = Number.isFinite(staticAudio.volume) ? staticAudio.volume : 0;
-    const start = performance.now();
+        let fadeRAF = null;
+        function fadeAudioTo(target, ms){
+          cancelAnimationFrame(fadeRAF);
+          const startVol = Number.isFinite(staticAudio.volume) ? staticAudio.volume : 0;
+          const start = performance.now();
 
-    function tick(t){
-      const p = Math.min(1, (t - start) / ms);
-      staticAudio.volume = startVol + (target - startVol) * p;
-      if(p < 1) fadeRAF = requestAnimationFrame(tick);
-    }
-    fadeRAF = requestAnimationFrame(tick);
-  }
+          function tick(t){
+            const p = Math.min(1, (t - start) / ms);
+            staticAudio.volume = startVol + (target - startVol) * p;
+            if(p < 1) fadeRAF = requestAnimationFrame(tick);
+          }
+          fadeRAF = requestAnimationFrame(tick);
+        }
 
-  let unlocked = false;
-  function unlockAudio(){
-    if(unlocked) return;
-    unlocked = true;
+        let unlocked = false;
+        function unlockAudio(){
+          if(unlocked) return;
+          unlocked = true;
 
-    staticAudio.volume = 0;
-    staticAudio.play().then(()=> {
-      staticAudio.pause();
-      staticAudio.currentTime = 0;
-    }).catch(()=>{});
-  }
-  window.addEventListener("pointerdown", unlockAudio, { once:true, passive:true });
+          staticAudio.volume = 0;
+          staticAudio.play().then(()=> {
+            staticAudio.pause();
+            staticAudio.currentTime = 0;
+          }).catch(()=>{});
+        }
+        window.addEventListener("pointerdown", unlockAudio, { once:true, passive:true });
 
-  async function startStatic(){
-    tv.classList.add("static-on");
-    try{ await staticVideo.play(); }catch(e){}
+        async function startStatic(){
+          tv.classList.add("static-on");
+          try{ await staticVideo.play(); }catch(e){}
 
-    if(staticAudio.paused){
-      staticAudio.currentTime = 0;
-      staticAudio.volume = 0;
-      staticAudio.play().catch(()=>{});
-    }
-    fadeAudioTo(0.6, QUICK_FADE_MS);
-  }
+          if(staticAudio.paused){
+            staticAudio.currentTime = 0;
+            staticAudio.volume = 0;
+            staticAudio.play().catch(()=>{});
+          }
+          fadeAudioTo(0.6, QUICK_FADE_MS);
+        }
 
-  function stopStatic(){
-    tv.classList.remove("static-on");
-    fadeAudioTo(0, 600);
+        function stopStatic(){
+          tv.classList.remove("static-on");
+          fadeAudioTo(0, 600);
 
-    setTimeout(() => {
-      try{ staticVideo.pause(); }catch(e){}
-      staticVideo.currentTime = 0;
+          setTimeout(() => {
+            try{ staticVideo.pause(); }catch(e){}
+            staticVideo.currentTime = 0;
 
-      if(staticAudio.volume <= 0.02){
-        staticAudio.pause();
-        staticAudio.currentTime = 0;
-      }
-    }, 650);
-  }
+            if(staticAudio.volume <= 0.02){
+              staticAudio.pause();
+              staticAudio.currentTime = 0;
+            }
+          }, 650);
+        }
 
-  async function switchTo(src){
-    if(switching) return;
-    switching = true;
+        async function switchTo(src){
+          if(switching) return;
+          switching = true;
 
-    await startStatic();
+          await startStatic();
 
-    setTimeout(async () => {
-      setVideoSrc(src);
-      try{ await video.play(); }catch(e){}
-      stopStatic();
-      switching = false;
-    }, DELAY_BEFORE_NEW_VIDEO_MS);
-  }
+          setTimeout(async () => {
+            setVideoSrc(src);
+            try{ await video.play(); }catch(e){}
+            stopStatic();
+            switching = false;
+          }, DELAY_BEFORE_NEW_VIDEO_MS);
+        }
 
-  function startDefaultPlaylist(fromBeginning=true){
-    playlist = DEFAULT_PLAYLIST.slice();
-    playlistIndex = fromBeginning ? 0 : playlistIndex;
-    video.loop = false;
-    switchTo(playlist[playlistIndex]);
-  }
+        function startDefaultPlaylist(fromBeginning=true){
+          playlist = DEFAULT_PLAYLIST.slice();
+          playlistIndex = fromBeginning ? 0 : playlistIndex;
+          video.loop = false;
+          switchTo(playlist[playlistIndex]);
+        }
 
-  video.addEventListener("ended", () => {
-    if(video.loop) return;
+        video.addEventListener("ended", () => {
+          if(video.loop) return;
 
-    playlistIndex = (playlistIndex + 1) % playlist.length;
-    const next = playlist[playlistIndex];
+          playlistIndex = (playlistIndex + 1) % playlist.length;
+          const next = playlist[playlistIndex];
 
-    setVideoSrc(next);
-    video.play().catch(()=>{});
-  });
+          setVideoSrc(next);
+          video.play().catch(()=>{});
+        });
 
-  startDefaultPlaylist(true);
-
-  btn.onclick = async () => {
-    if(video.paused){
-      try{ await video.play(); }catch(e){}
-    }else{
-      video.pause();
-    }
-  };
-
-  document.querySelectorAll(".vid-btn").forEach(b => {
-    b.addEventListener("click", async (e) => {
-      e.stopPropagation();
-      const src = b.dataset.src;
-
-      if(src === "__DEFAULT__"){
         startDefaultPlaylist(true);
-        return;
-      }
 
-      if(src){
-        video.loop = true;
-        await switchTo(src);
-      }
-    });
-  });
+        btn.onclick = async () => {
+          if(video.paused){
+            try{ await video.play(); }catch(e){}
+          }else{
+            video.pause();
+          }
+        };
 
-});
-</script>
+        document.querySelectorAll(".vid-btn").forEach(b => {
+          b.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const src = b.dataset.src;
 
+            if(src === "__DEFAULT__"){
+              startDefaultPlaylist(true);
+              return;
+            }
+
+            if(src){
+              video.loop = true;
+              await switchTo(src);
+            }
+          });
+        });
+
+      });
+    </script>
   </body>
 </html>
