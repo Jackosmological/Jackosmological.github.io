@@ -2,8 +2,9 @@
 
 :root{
   /* ✅ set by JS */
-  --bg-h: 100vh;        /* background.png rendered height */
-  --tv-top-px: 50vh;    /* tv center Y in px (derived from bg height) */
+  --bg-h: 100vh;
+  --tv-top-px: 50vh;   /* base TV center Y (px) */
+  --tv-down-px: 0px;   /* ✅ extra downward shift = 1.05×TV height (set by JS) */
 
   /* TV sizing */
   --tv-width: 520px;
@@ -23,11 +24,8 @@
 
 html, body{
   margin:0;
-
-  /* ✅ page ends exactly at the background image height */
   height: var(--bg-h);
   min-height: var(--bg-h);
-
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -38,7 +36,7 @@ html, body{
 
 body{ position: relative; }
 
-/* FULL-WIDTH BACKGROUND (fills horizontally; height matches actual rendered image height) */
+/* background.png fills horizontally; page ends at its bottom */
 body::before{
   content:"";
   position: absolute;
@@ -51,7 +49,7 @@ body::before{
   pointer-events: none;
 }
 
-/* wrapper matches background height so scroll ends exactly at PNG bottom */
+/* wrapper matches background height */
 .wrap{
   position: relative;
   z-index: 1;
@@ -61,20 +59,15 @@ body::before{
   min-height: var(--bg-h);
 
   margin: 0;
-
   box-sizing: border-box;
   padding: 0;
 }
 
-/* =========================
-   TV RIG
-   ✅ centered in the PNG (which is centered in the viewport)
-   ========================= */
+/* TV centered horizontally in the PNG; moved down by 1.05×its height */
 .tv{
   position: absolute;
-
-  left: 50vw;              /* ✅ center horizontally in the PNG */
-  top:  var(--tv-top-px);  /* ✅ tied to PNG height so it hits your drawn box */
+  left: 50vw;
+  top: calc(var(--tv-top-px) + var(--tv-down-px));
 
   transform: translate(-50%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
