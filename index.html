@@ -45,9 +45,9 @@
       document.addEventListener("DOMContentLoaded", () => {
 
         /* =========================
-           ✅ PAGE ENDS AT ACTUAL background.png HEIGHT
-           background is rendered at width = 100vw with "100% auto"
-           so renderedHeight = (naturalHeight/naturalWidth) * viewportWidth
+           PAGE ENDS AT ACTUAL background.png HEIGHT
+           background rendered at width = 100vw (100% auto)
+           renderedHeight = (naturalHeight/naturalWidth) * viewportWidth
            ========================= */
         const bg = new Image();
         bg.src = "background.png";
@@ -58,18 +58,15 @@
           const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
           const renderedH = (bg.naturalHeight / bg.naturalWidth) * vw;
 
-          // store in a CSS variable (px) used by body + ::before + .wrap
           document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
         }
 
         bg.addEventListener("load", setBgHeight);
         window.addEventListener("resize", setBgHeight, { passive: true });
-
-        // in case it’s already cached
         if(bg.complete) setBgHeight();
 
         /* =========================
-           TV logic (unchanged except static volume already halved)
+           TV logic
            ========================= */
         const tv = document.getElementById("tv");
 
@@ -143,7 +140,7 @@
             staticAudio.volume = 0;
             staticAudio.play().catch(()=>{});
           }
-          fadeAudioTo(0.3, QUICK_FADE_MS); // half volume vs the old 0.6
+          fadeAudioTo(0.3, QUICK_FADE_MS);
         }
 
         function stopStatic(){
