@@ -2,14 +2,14 @@
 
 :root{
   /* =========================
-     A4 SHEET BACKGROUND SETUP
+     BACKGROUND PNG HEIGHT (PAGE ENDS HERE)
      ========================= */
   --a4-width: min(1100px, 100vw);
   --a4-aspect: 1.414;                 /* A-series ratio */
   --a4-height: calc(var(--a4-width) * var(--a4-aspect));
 
   /* =========================
-     TV RIG CONTROLS (anchored to background/document)
+     TV RIG CONTROLS (anchored to document/background)
      ========================= */
   --tv-left: 50vw;
   --tv-top: calc(50vh + 75vh - 10vh);
@@ -31,8 +31,12 @@
 
 html, body{
   margin:0;
-  height: var(--a4-height); /* ✅ stop the website at the bottom of the PNG */
-  overflow: hidden;         /* ✅ prevent scrolling beyond background */
+  /* ✅ allow scrolling */
+  min-height: var(--a4-height);  /* page is at least the PNG height */
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+
   background:#ffffff;
   color:#000000;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -40,25 +44,26 @@ html, body{
 
 body{ position: relative; }
 
-/* FULL-WIDTH BACKGROUND (stops at its bottom) */
+/* ✅ FULL-WIDTH BACKGROUND (fills horizontally, scrolls to bottom, page ends at bottom) */
 body::before{
   content:"";
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: var(--a4-height);           /* ✅ exactly the background height */
+  height: var(--a4-height);                 /* ✅ exactly the background height */
   background: url("background.png") top center / 100% auto no-repeat;
   z-index: 0;
   pointer-events: none;
 }
 
-/* Content sits on top of the background */
+/* Content layer matches background height so scroll ends at bottom of PNG */
 .wrap{
   position: relative;
   z-index: 1;
   width: var(--a4-width);
-  height: var(--a4-height);          /* ✅ match background exactly */
+  min-height: var(--a4-height);
+  height: var(--a4-height);                 /* ✅ lock content height to PNG height */
   margin: 0 auto;
 
   padding: 0;
@@ -68,16 +73,14 @@ body::before{
 }
 
 /* =========================
-   TV RIG (STICKS TO BACKGROUND)
+   TV RIG (sticks to background/document)
    ========================= */
 .tv{
   position: absolute;
   left: var(--tv-left);
   top:  var(--tv-top);
 
-  /* ✅ moved LEFT by another 1/8 width (12.5%)
-     previous: -62.5%, now: -75%
-  */
+  /* moved left total 2/8 = 1/4 of its width */
   transform: translate(-75%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
