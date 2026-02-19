@@ -36,8 +36,8 @@ html, body{
   margin:0;
 
   /* ✅ Page ends exactly at the rendered background image height */
-  min-height: var(--bg-h);
   height: var(--bg-h);
+  min-height: var(--bg-h);
 
   overflow-y: auto;
   overflow-x: hidden;
@@ -62,19 +62,21 @@ body::before{
   pointer-events: none;
 }
 
-/* ✅ Restore your original centered content wrapper (even though it has no text now)
-   This keeps the same overall layout context you had before. */
+/* ✅ Restore your original centered wrapper, BUT keep it from increasing page height */
 .wrap{
   position: relative;
   z-index: 1;
 
   width: var(--a4-width);
-  min-height: var(--bg-h);
   height: var(--bg-h);
+  min-height: var(--bg-h);
 
   margin: 0 auto;
 
-  /* restore the same padding values you had */
+  /* ✅ critical: padding is included inside height, so page won't exceed PNG height */
+  box-sizing: border-box;
+
+  /* keep your old padding values (won't add extra height now) */
   padding: 0;
   padding-top: 260px;
   padding-left: 120px;
@@ -89,7 +91,7 @@ body::before{
   left: var(--tv-left);
   top:  var(--tv-top);
 
-  /* ✅ EXACTLY what you had before the JS height change */
+  /* ✅ EXACT current position you liked */
   transform: translate(-75%, -50%) scale(var(--tv-scale));
   transform-origin: center center;
 
