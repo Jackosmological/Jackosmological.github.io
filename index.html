@@ -11,15 +11,28 @@
   <body>
     <main class="wrap">
 
-      <!-- ✅ NEW: 5 overlay PNGs (position + size controlled in CSS) -->
-      <img class="link-png" id="link1" src="link1.png" alt="">
-      <img class="link-png" id="link2" src="link2.png" alt="">
-      <img class="link-png" id="link3" src="link3.png" alt="">
-      <img class="link-png" id="link4" src="link4.png" alt="">
-      <img class="link-png" id="link5" src="link5.png" alt="">
+      <!-- ✅ LINK PNGs (invisible until hover; clickable) -->
+      <a class="link-wrap" id="link1" href="mailto:jack.henqcd@gmail.com" aria-label="Email Jack">
+        <img class="link-png" src="link1.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link2" href="files.html" aria-label="Files page (Link 2)">
+        <img class="link-png" src="link2.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link3" href="files3.html" aria-label="Files page (Link 3)">
+        <img class="link-png" src="link3.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link4" href="CV.pdf" target="_blank" rel="noopener" aria-label="Open CV PDF">
+        <img class="link-png" src="link4.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link5" href="files5.html" aria-label="Files page (Link 5)">
+        <img class="link-png" src="link5.png" alt="">
+      </a>
 
       <div class="tv" id="tv">
-
         <img class="tv-screen" src="screen.png" alt="">
 
         <video class="tv-static-video" id="staticVideo" loop playsinline muted preload="auto">
@@ -41,7 +54,6 @@
         <button class="vid-btn" id="vDefault" data-src="__DEFAULT__" aria-label="Play default presentation" type="button">
           DEFAULT
         </button>
-
       </div>
 
       <audio id="staticAudio" loop preload="auto">
