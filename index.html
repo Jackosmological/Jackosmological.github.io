@@ -1,34 +1,273 @@
-<!-- files.html — FULL copy/paste -->
+<!-- index.html — FULL copy/paste -->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Files</title>
-    <link rel="stylesheet" href="files.css" />
+    <title>Jack Henderson</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
+
   <body>
     <main class="wrap">
-      <!-- put your files/content here later -->
+
+      <!-- ✅ LINK PNGs (invisible until hover; clickable) -->
+      <a class="link-wrap" id="link1" href="mailto:jack.henqcd@gmail.com" aria-label="Email Jack">
+        <img class="link-png" src="link1.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link2" href="files.html" aria-label="Files page (Link 2)">
+        <img class="link-png" src="link2.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link3" href="files3.html" aria-label="Files page (Link 3)">
+        <img class="link-png" src="link3.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link4" href="CV.pdf" target="_blank" rel="noopener" aria-label="Open CV PDF">
+        <img class="link-png" src="link4.png" alt="">
+      </a>
+
+      <a class="link-wrap" id="link5" href="files5.html" aria-label="Files page (Link 5)">
+        <img class="link-png" src="link5.png" alt="">
+      </a>
+
+      <div class="tv" id="tv">
+        <img class="tv-screen" src="screen.png" alt="">
+
+        <video class="tv-static-video" id="staticVideo" loop playsinline muted preload="auto">
+          <source src="static.mp4" type="video/mp4">
+        </video>
+
+        <video class="tv-video" id="video" autoplay muted playsinline preload="metadata"></video>
+
+        <button class="play-btn" id="playBtn" aria-label="Play/Pause" type="button"></button>
+
+        <img class="tv-frame" src="tv.png" alt="">
+
+        <button class="vid-btn" id="v1" data-src="vid1.mp4" aria-label="Play vid 1" type="button">1</button>
+        <button class="vid-btn" id="v2" data-src="vid2.mp4" aria-label="Play vid 2" type="button">2</button>
+        <button class="vid-btn" id="v3" data-src="vid3.mp4" aria-label="Play vid 3" type="button">3</button>
+        <button class="vid-btn" id="v4" data-src="vid4.mp4" aria-label="Play vid 4" type="button">4</button>
+        <button class="vid-btn" id="v5" data-src="vid5.mp4" aria-label="Play vid 5" type="button">5</button>
+
+        <button class="vid-btn" id="vDefault" data-src="__DEFAULT__" aria-label="Play default presentation" type="button">
+          DEFAULT
+        </button>
+      </div>
+
+      <audio id="staticAudio" loop preload="auto">
+        <source src="static.mp3" type="audio/mpeg">
+      </audio>
     </main>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const bg = new Image();
-        bg.src = "backgroundfiles.png";
 
-        function setBgHeight(){
+        const tv = document.getElementById("tv");
+
+        /* =========================
+           PAGE ENDS AT ACTUAL background.png HEIGHT
+           AND TV BASE POSITION TIED TO THAT HEIGHT
+           ========================= */
+        const bg = new Image();
+        bg.src = "background.png";
+
+        // Base vertical anchor you had (relative to background height)
+        const TV_CENTER_Y_FRACTION_OF_BG = 0.35;
+
+        // Move down by 1.05 × its (scaled) height
+        const TV_DOWN_MULTIPLE_OF_HEIGHT = 1.05;
+
+        function getCssNumber(varName, fallback){
+          const v = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+          const n = parseFloat(v);
+          return Number.isFinite(n) ? n : fallback;
+        }
+
+        function setBgVars(){
           if(!bg.naturalWidth || !bg.naturalHeight) return;
 
           const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
           const renderedH = (bg.naturalHeight / bg.naturalWidth) * vw;
 
           document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
+          document.documentElement.style.setProperty("--tv-top-px", `${Math.round(renderedH * TV_CENTER_Y_FRACTION_OF_BG)}px`);
+
+          requestAnimationFrame(setTvDownShift);
         }
 
-        bg.addEventListener("load", setBgHeight);
-        window.addEventListener("resize", setBgHeight, { passive: true });
-        if(bg.complete) setBgHeight();
+        function setTvDownShift(){
+          const tvScale = getCssNumber("--tv-scale", 1);
+          const unscaledH = tv.offsetHeight || 0;
+          const scaledH = unscaledH * tvScale;
+
+          const downPx = Math.round(scaledH * TV_DOWN_MULTIPLE_OF_HEIGHT);
+          document.documentElement.style.setProperty("--tv-down-px", `${downPx}px`);
+        }
+
+        bg.addEventListener("load", setBgVars);
+        window.addEventListener("resize", () => {
+          setBgVars();
+          requestAnimationFrame(setTvDownShift);
+        }, { passive: true });
+
+        if(bg.complete) setBgVars();
+
+        window.addEventListener("load", () => {
+          setBgVars();
+          setTvDownShift();
+        });
+
+        /* =========================
+           TV logic (static volume already halved)
+           ========================= */
+        const video = document.getElementById("video");
+        const staticVideo = document.getElementById("staticVideo");
+
+        const btn = document.getElementById("playBtn");
+        const staticAudio = document.getElementById("staticAudio");
+
+        const DEFAULT_PLAYLIST = ["pres.mp4", "pres2.mp4"];
+        let playlist = DEFAULT_PLAYLIST.slice();
+        let playlistIndex = 0;
+
+        let switching = false;
+
+        const DELAY_BEFORE_NEW_VIDEO_MS = 900;
+        const QUICK_FADE_MS = 400;
+
+        const sourceEl = document.createElement("source");
+        sourceEl.type = "video/mp4";
+        video.appendChild(sourceEl);
+
+        function isPres(src){
+          return src === "pres.mp4" || src === "pres2.mp4";
+        }
+
+        function setPresMode(on){
+          if(on) tv.classList.add("pres-mode");
+          else tv.classList.remove("pres-mode");
+        }
+
+        function setVideoSrc(src){
+          setPresMode(isPres(src));
+          sourceEl.setAttribute("src", src);
+          video.load();
+        }
+
+        let fadeRAF = null;
+        function fadeAudioTo(target, ms){
+          cancelAnimationFrame(fadeRAF);
+          const startVol = Number.isFinite(staticAudio.volume) ? staticAudio.volume : 0;
+          const start = performance.now();
+
+          function tick(t){
+            const p = Math.min(1, (t - start) / ms);
+            staticAudio.volume = startVol + (target - startVol) * p;
+            if(p < 1) fadeRAF = requestAnimationFrame(tick);
+          }
+          fadeRAF = requestAnimationFrame(tick);
+        }
+
+        let unlocked = false;
+        function unlockAudio(){
+          if(unlocked) return;
+          unlocked = true;
+
+          staticAudio.volume = 0;
+          staticAudio.play().then(()=> {
+            staticAudio.pause();
+            staticAudio.currentTime = 0;
+          }).catch(()=>{});
+        }
+        window.addEventListener("pointerdown", unlockAudio, { once:true, passive:true });
+
+        async function startStatic(){
+          tv.classList.add("static-on");
+          try{ await staticVideo.play(); }catch(e){}
+
+          if(staticAudio.paused){
+            staticAudio.currentTime = 0;
+            staticAudio.volume = 0;
+            staticAudio.play().catch(()=>{});
+          }
+          fadeAudioTo(0.3, QUICK_FADE_MS);
+        }
+
+        function stopStatic(){
+          tv.classList.remove("static-on");
+          fadeAudioTo(0, 600);
+
+          setTimeout(() => {
+            try{ staticVideo.pause(); }catch(e){}
+            staticVideo.currentTime = 0;
+
+            if(staticAudio.volume <= 0.02){
+              staticAudio.pause();
+              staticAudio.currentTime = 0;
+            }
+          }, 650);
+        }
+
+        async function switchTo(src){
+          if(switching) return;
+          switching = true;
+
+          await startStatic();
+
+          setTimeout(async () => {
+            setVideoSrc(src);
+            try{ await video.play(); }catch(e){}
+            stopStatic();
+            switching = false;
+          }, DELAY_BEFORE_NEW_VIDEO_MS);
+        }
+
+        function startDefaultPlaylist(fromBeginning=true){
+          playlist = DEFAULT_PLAYLIST.slice();
+          playlistIndex = fromBeginning ? 0 : playlistIndex;
+          video.loop = false;
+          switchTo(playlist[playlistIndex]);
+        }
+
+        video.addEventListener("ended", () => {
+          if(video.loop) return;
+
+          playlistIndex = (playlistIndex + 1) % playlist.length;
+          const next = playlist[playlistIndex];
+
+          setVideoSrc(next);
+          video.play().catch(()=>{});
+        });
+
+        startDefaultPlaylist(true);
+
+        btn.onclick = async () => {
+          if(video.paused){
+            try{ await video.play(); }catch(e){}
+          }else{
+            video.pause();
+          }
+        };
+
+        document.querySelectorAll(".vid-btn").forEach(b => {
+          b.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const src = b.dataset.src;
+
+            if(src === "__DEFAULT__"){
+              startDefaultPlaylist(true);
+              return;
+            }
+
+            if(src){
+              video.loop = true;
+              await switchTo(src);
+            }
+          });
+        });
+
       });
     </script>
   </body>
