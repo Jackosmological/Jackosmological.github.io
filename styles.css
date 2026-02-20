@@ -30,7 +30,8 @@
   /* =========================
      ✅ LINK PNG CONTROLS (edit these)
      ========================= */
-  --link-opacity: 0.5;
+  --link-opacity-idle: 0;     /* hidden unless hovered */
+  --link-opacity-hover: 1;    /* full opacity on hover */
 
   --link1-x: 185px; --link1-y: 218px; --link1-w: 900px;
   --link2-x: 207px; --link2-y: 348px; --link2-w: 900px;
@@ -76,16 +77,32 @@ body::before{
   padding: 0;
 }
 
-/* ✅ NEW: shared styling for link PNGs */
-.link-png{
+/* ✅ clickable container (positioned & sized) */
+.link-wrap{
   position: absolute;
-  opacity: var(--link-opacity);
-  z-index: 40;           /* behind TV (50), above background (0) */
-  pointer-events: none;  /* set to auto later if you want clickable */
-  height: auto;
+  z-index: 40;                 /* behind TV (50), above background (0) */
+  display: block;
+  text-decoration: none;
+  outline: none;
 }
 
-/* ✅ Individual positioning + sizing */
+/* image itself */
+.link-wrap .link-png{
+  display:block;
+  width:100%;
+  height:auto;
+
+  opacity: var(--link-opacity-idle);
+  transition: opacity 140ms ease;
+}
+
+/* show only on hover/focus */
+.link-wrap:hover .link-png,
+.link-wrap:focus-visible .link-png{
+  opacity: var(--link-opacity-hover);
+}
+
+/* ✅ Individual positioning + sizing (applies to the clickable area too) */
 #link1{ left: var(--link1-x); top: var(--link1-y); width: var(--link1-w); }
 #link2{ left: var(--link2-x); top: var(--link2-y); width: var(--link2-w); }
 #link3{ left: var(--link3-x); top: var(--link3-y); width: var(--link3-w); }
