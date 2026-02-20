@@ -1,27 +1,59 @@
-/* files.css — FULL copy/paste */
+/* styles.css — FULL copy/paste */
 
 :root{
-  --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
+  /* ✅ set by JS */
+  --bg-h: 100vh;
+  --tv-top-px: 50vh;   /* base TV center Y (px) */
+  --tv-down-px: 0px;   /* extra downward shift (set by JS) */
+
+  /* =========================
+     ✅ MANUAL TV POSITION SETTINGS
+     ========================= */
+  --tv-x: 0px;
+  --tv-y: -140px;
+
+  /* TV sizing */
+  --tv-width: 520px;
+  --tv-scale: 1.5;
+
+  /* Screen rectangle inside tv.png */
+  --sx: 8%;
+  --sy: 8%;
+  --sw: 78%;
+  --sh: 78%;
+
+  /* pres.mp4 + pres2.mp4 adjustments */
+  --pres-scale: 0.92;
+  --pres-shift-px: -20px;
+  --pres-stretch-y: 1.20;
+
+  /* =========================
+     ✅ LINK PNG CONTROLS (edit these)
+     ========================= */
+  --link-opacity-idle: 0;     /* hidden unless hovered */
+  --link-opacity-hover: 1;    /* full opacity on hover */
+
+  --link1-x: 185px; --link1-y: 218px; --link1-w: 900px;
+  --link2-x: 207px; --link2-y: 348px; --link2-w: 900px;
+  --link3-x: 210px; --link3-y: 450px; --link3-w: 560px;
+  --link4-x: 210px; --link4-y: 550px; --link4-w: 250px;
+  --link5-x: 575px; --link5-y: 570px; --link5-w: 500px;
 }
 
 html, body{
   margin:0;
-
-  /* ✅ page height ends exactly at the rendered PNG height */
   height: var(--bg-h);
   min-height: var(--bg-h);
-
   overflow-y: auto;
   overflow-x: hidden;
 
   background:#ffffff;
+  color:#000000;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-body{
-  position: relative;
-}
+body{ position: relative; }
 
-/* ✅ full-width background, scaled to fill horizontally */
 body::before{
   content:"";
   position: absolute;
@@ -29,20 +61,226 @@ body::before{
   left: 0;
   width: 100vw;
   height: var(--bg-h);
-  background: url("backgroundfiles.png") top center / 100% auto no-repeat;
-  pointer-events:none;
-  z-index:0;
+  background: url("background.png") top center / 100% auto no-repeat;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .wrap{
   position: relative;
-  z-index:1;
-
+  z-index: 1;
   width: 100%;
   height: var(--bg-h);
   min-height: var(--bg-h);
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
 
-  margin:0;
+/* ✅ clickable container (positioned & sized) */
+.link-wrap{
+  position: absolute;
+  z-index: 40;                 /* behind TV (50), above background (0) */
+  display: block;
+  text-decoration: none;
+  outline: none;
+}
+
+/* image itself */
+.link-wrap .link-png{
+  display:block;
+  width:100%;
+  height:auto;
+
+  opacity: var(--link-opacity-idle);
+  transition: opacity 140ms ease;
+}
+
+/* show only on hover/focus */
+.link-wrap:hover .link-png,
+.link-wrap:focus-visible .link-png{
+  opacity: var(--link-opacity-hover);
+}
+
+/* ✅ Individual positioning + sizing (applies to the clickable area too) */
+#link1{ left: var(--link1-x); top: var(--link1-y); width: var(--link1-w); }
+#link2{ left: var(--link2-x); top: var(--link2-y); width: var(--link2-w); }
+#link3{ left: var(--link3-x); top: var(--link3-y); width: var(--link3-w); }
+#link4{ left: var(--link4-x); top: var(--link4-y); width: var(--link4-w); }
+#link5{ left: var(--link5-x); top: var(--link5-y); width: var(--link5-w); }
+
+/* ✅ TV position uses the manual offsets */
+.tv{
+  position: absolute;
+
+  left: calc(50vw + var(--tv-x));
+  top:  calc(var(--tv-top-px) + var(--tv-down-px) + var(--tv-y));
+
+  transform: translate(-50%, -50%) scale(var(--tv-scale));
+  transform-origin: center center;
+
+  width: var(--tv-width);
+  z-index: 50;
+  pointer-events:auto;
+}
+
+/* (rest unchanged) */
+.tv-screen{
+  position:absolute;
+  left:var(--sx);
+  top:var(--sy);
+  width:var(--sw);
+  height:var(--sh);
+  object-fit:cover;
+  opacity:.8;
+  z-index:0;
+  pointer-events:none;
+}
+
+.tv-video{
+  position:absolute;
+  left:var(--sx);
+  top:var(--sy);
+  width:var(--sw);
+  height:var(--sh);
+  object-fit:cover;
+  opacity:1;
+  z-index:1;
+}
+
+.pres-mode .tv-video{
+  object-fit:contain;
+  object-position:left center;
+  transform:
+    translateX(var(--pres-shift-px))
+    scale(var(--pres-scale), calc(var(--pres-scale) * var(--pres-stretch-y)));
+  transform-origin:center center;
+}
+
+.tv-static-video{
+  position:absolute;
+  left:var(--sx);
+  top:var(--sy);
+  width:var(--sw);
+  height:var(--sh);
+  object-fit:cover;
+  z-index:2;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s ease;
+}
+.static-on .tv-static-video{ opacity:1; }
+
+.tv::before{
+  content:"";
+  position:absolute;
+  left:var(--sx);
+  top:var(--sy);
+  width:var(--sw);
+  height:var(--sh);
+  z-index:4;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,.25) 0px,
+    transparent 3px
+  );
+  pointer-events:none;
+}
+
+.tv-frame{
+  width:100%;
+  z-index:5;
+  position:relative;
+  pointer-events:none;
+}
+
+.play-btn{
+  position:absolute;
+  left:50%;
+  top:13.8%;
+  width:var(--sw);
+  height:var(--sh);
+  z-index:6;
+  border:none;
+  background:none;
+  cursor:pointer;
+  pointer-events:auto;
+}
+
+.play-btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width:10px;
+  height:10px;
+  border-radius:20%;
+  background:rgba(0,0,0,.6);
+  pointer-events:none;
+}
+
+.play-btn::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-40%,-50%);
+  border-left:9.7px solid white;
+  border-top:6px solid transparent;
+  border-bottom:6px solid transparent;
+  pointer-events:none;
+}
+
+.vid-btn{
+  position:absolute;
+  z-index:10;
+  cursor:pointer;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  color:transparent;
+  opacity:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:auto;
+}
+
+#v1,#v2,#v3,#v4,#v5{
+  width:14px;
+  height:14px;
+  border-radius:999px;
+  font-size:8px;
+  line-height:1;
   padding:0;
-  box-sizing:border-box;
+  transform:translate(-50%,-50%);
+}
+
+#v1{ --l:79.8%; --t:55.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
+#v2{ --l:79.8%; --t:60.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
+#v3{ --l:79.8%; --t:65.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
+#v4{ --l:79.8%; --t:70.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
+#v5{ --l:79.8%; --t:75.6%; left:calc(var(--l) + 7px); top:calc(var(--t) - 18.2px); }
+
+#vDefault{
+  width:48px;
+  height:48px;
+  border-radius:999px;
+  font-size:10px;
+  line-height:1.05;
+  padding:0 6px;
+  transform:translate(-50%,-50%);
+  left:calc(87.0% + 4.8px);
+  top:calc(76.3% - 24px);
+}
+
+@media (max-width: 520px){
+  :root{
+    --tv-width: 340px;
+    --tv-scale: 1.5;
+
+    --pres-scale: 0.92;
+    --pres-shift-px: -10px;
+    --pres-stretch-y: 1.10;
+  }
 }
