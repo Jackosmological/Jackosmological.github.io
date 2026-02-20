@@ -1,1 +1,35 @@
+<!-- files3.html — FULL copy/paste -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Files 3</title>
+    <link rel="stylesheet" href="files.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <!-- put your files/content here later -->
+    </main>
 
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const bg = new Image();
+        bg.src = "backgroundfiles.png";
+
+        function setBgHeight(){
+          if(!bg.naturalWidth || !bg.naturalHeight) return;
+
+          const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+          const renderedH = (bg.naturalHeight / bg.naturalWidth) * vw;
+
+          document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
+        }
+
+        bg.addEventListener("load", setBgHeight);
+        window.addEventListener("resize", setBgHeight, { passive: true });
+        if(bg.complete) setBgHeight();
+      });
+    </script>
+  </body>
+</html>
