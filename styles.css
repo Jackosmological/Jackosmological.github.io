@@ -34,9 +34,9 @@
 
   --link1-x: 185px; --link1-y: 218px; --link1-w: 900px;
   --link2-x: 207px; --link2-y: 348px; --link2-w: 900px;
-  --link3-x: 160px; --link3-y: 440px; --link3-w: 600px;
-  --link4-x: 580px; --link4-y: 470px; --link4-w: 200px;
-  --link5-x: 500px; --link5-y: 100px; --link5-w: 140px;
+  --link3-x: 180px; --link3-y: 440px; --link3-w: 580px;
+  --link4-x: 580px; --link4-y: 520px; --link4-w: 250px;
+  --link5-x: 400px; --link5-y: 100px; --link5-w: 140px;
 }
 
 html, body{
