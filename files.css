@@ -2,26 +2,27 @@
 
 :root{
   --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
+
+  /* ✅ RETURN BUTTON SETTINGS (edit these) */
+  --return-x: 40px;
+  --return-y: 40px;
+  --return-w: 140px;
+  --return-opacity-idle: 0;  /* hidden until hover */
+  --return-opacity-hover: 1; /* full on hover */
 }
 
 html, body{
   margin:0;
-
-  /* ✅ page height ends exactly at the rendered PNG height */
   height: var(--bg-h);
   min-height: var(--bg-h);
-
   overflow-y: auto;
   overflow-x: hidden;
-
   background:#ffffff;
 }
 
-body{
-  position: relative;
-}
+body{ position: relative; }
 
-/* ✅ full-width background, scaled to fill horizontally */
+/* ✅ full-width background */
 body::before{
   content:"";
   position: absolute;
@@ -37,12 +38,36 @@ body::before{
 .wrap{
   position: relative;
   z-index:1;
-
   width: 100%;
   height: var(--bg-h);
   min-height: var(--bg-h);
-
   margin:0;
   padding:0;
   box-sizing:border-box;
+}
+
+/* ✅ Return button */
+.return-btn{
+  position: absolute;
+  left: var(--return-x);
+  top:  var(--return-y);
+  width: var(--return-w);
+  display:block;
+  z-index: 10;
+  text-decoration:none;
+  outline:none;
+}
+
+.return-btn img{
+  width:100%;
+  height:auto;
+  display:block;
+  opacity: var(--return-opacity-idle);
+  transition: opacity 140ms ease;
+}
+
+/* show on hover/focus */
+.return-btn:hover img,
+.return-btn:focus-visible img{
+  opacity: var(--return-opacity-hover);
 }
