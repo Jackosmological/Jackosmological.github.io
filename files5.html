@@ -1,35 +1,71 @@
-<!-- files5.html — FULL copy/paste -->
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Files 5</title>
-    <link rel="stylesheet" href="files.css" />
-  </head>
-  <body>
-    <main class="wrap">
-      <!-- put your files/content here later -->
-    </main>
+/* files.css — FULL copy/paste */
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const bg = new Image();
-        bg.src = "backgroundfiles.png";
+:root{
+  --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
 
-        function setBgHeight(){
-          if(!bg.naturalWidth || !bg.naturalHeight) return;
+  /* ✅ RETURN PNG SETTINGS */
+  --return-x: 40px;
+  --return-y: 40px;
+  --return-w: 180px;
+  --return-opacity-idle: 0;  /* hidden until hover */
+  --return-opacity-hover: 0.5; /* 50% on hover */
+}
 
-          const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-          const renderedH = (bg.naturalHeight / bg.naturalWidth) * vw;
+html, body{
+  margin:0;
+  height: var(--bg-h);
+  min-height: var(--bg-h);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background:#ffffff;
+}
 
-          document.documentElement.style.setProperty("--bg-h", `${Math.ceil(renderedH)}px`);
-        }
+body{ position: relative; }
 
-        bg.addEventListener("load", setBgHeight);
-        window.addEventListener("resize", setBgHeight, { passive: true });
-        if(bg.complete) setBgHeight();
-      });
-    </script>
-  </body>
-</html>
+body::before{
+  content:"";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: var(--bg-h);
+  background: url("backgroundfiles.png") top center / 100% auto no-repeat;
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{
+  position: relative;
+  z-index:1;
+  width: 100%;
+  height: var(--bg-h);
+  min-height: var(--bg-h);
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+/* ✅ Return button as PNG (clickable, only appears on hover) */
+.return-btn{
+  position: absolute;
+  left: var(--return-x);
+  top:  var(--return-y);
+  width: var(--return-w);
+  display:block;
+  z-index: 10;
+  text-decoration:none;
+  outline:none;
+}
+
+.return-btn img{
+  width:100%;
+  height:auto;
+  display:block;
+  opacity: var(--return-opacity-idle);
+  transition: opacity 140ms ease;
+}
+
+.return-btn:hover img,
+.return-btn:focus-visible img{
+  opacity: var(--return-opacity-hover);
+}
