@@ -4,9 +4,9 @@
   --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
 
   /* ✅ RETURN PNG SETTINGS */
-  --return-x: 40px;
+  --return-x: 80px;
   --return-y: 40px;
-  --return-w: 180px;
+  --return-w: 350px;
   --return-opacity-idle: 0;     /* hidden until hover */
   --return-opacity-hover: 0.5;  /* 50% on hover */
 }
