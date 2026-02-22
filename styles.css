@@ -42,8 +42,8 @@
   /* =========================
      ✅ NEW: BUTTONS.PNG CONTROLS (main page)
      ========================= */
-  --buttons-x: 750px;
-  --buttons-y: 600px;
+  --buttons-x: 900px;
+  --buttons-y: 680px;
   --buttons-w: 300px;     /* change width to resize */
   --buttons-opacity: 0.8; /* 80% */
 }
