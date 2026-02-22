@@ -45,7 +45,7 @@
   --buttons-x: 1100px;
   --buttons-y: 750px;
   --buttons-w: 300px;     /* change width to resize */
-  --buttons-opacity: 0.8; /* 80% */
+  --buttons-opacity: 0.4; /* 80% */
 }
 
 html, body{
