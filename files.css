@@ -1,11 +1,12 @@
+
 /* files.css — FULL copy/paste */
 
 :root{
   --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
 
   /* ✅ RETURN PNG SETTINGS */
-  --return-x: 50px;
-  --return-y: 20px;
+  --return-x: 20px;
+  --return-y: 5px;
   --return-w: 390px;
   --return-opacity-idle: 0;     /* hidden until hover */
   --return-opacity-hover: 0.5;  /* 50% on hover */
