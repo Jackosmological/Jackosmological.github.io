@@ -9,7 +9,7 @@
   --return-y: 0px;
   --return-w: 390px;
   --return-opacity-idle: 0;     /* hidden until hover */
-  --return-opacity-hover: 0.5;  /* 50% on hover */
+  --return-opacity-hover: 1;  /* 50% on hover */
 }
 
 html, body{
