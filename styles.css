@@ -42,7 +42,7 @@
   /* =========================
      ✅ NEW: BUTTONS.PNG CONTROLS (main page)
      ========================= */
-  --buttons-x: 700px;
+  --buttons-x: 800px;
   --buttons-y: 800px;
   --buttons-w: 300px;     /* change width to resize */
   --buttons-opacity: 0.8; /* 80% */
