@@ -1,12 +1,14 @@
-/* files.css — FULL copy/paste */
+//* files.css — FULL copy/paste */
 
 :root{
   --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
 
-  /* ✅ RETURN BUTTON SETTINGS */
+  /* ✅ RETURN PNG SETTINGS */
   --return-x: 40px;
   --return-y: 40px;
-  --return-font-size: 20px;
+  --return-w: 180px;
+  --return-opacity-idle: 0;  /* hidden until hover */
+  --return-opacity-hover: 0.5; /* 50% on hover */
 }
 
 html, body{
@@ -20,7 +22,6 @@ html, body{
 
 body{ position: relative; }
 
-/* ✅ full-width background */
 body::before{
   content:"";
   position: absolute;
@@ -44,24 +45,27 @@ body::before{
   box-sizing:border-box;
 }
 
-/* ✅ TEMP red text return button */
+/* ✅ Return button as PNG (clickable, only appears on hover) */
 .return-btn{
   position: absolute;
   left: var(--return-x);
   top:  var(--return-y);
+  width: var(--return-w);
+  display:block;
   z-index: 10;
-
-  color: #ff0000;
-  font-size: var(--return-font-size);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-
-  cursor: pointer;
-  user-select: none;
+  text-decoration:none;
+  outline:none;
 }
 
-.return-btn:hover{
-  text-decoration: underline;
+.return-btn img{
+  width:100%;
+  height:auto;
+  display:block;
+  opacity: var(--return-opacity-idle);
+  transition: opacity 140ms ease;
+}
+
+.return-btn:hover img,
+.return-btn:focus-visible img{
+  opacity: var(--return-opacity-hover);
 }
