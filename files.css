@@ -1,4 +1,4 @@
-//* files.css — FULL copy/paste */
+/* files.css — FULL copy/paste */
 
 :root{
   --bg-h: 100vh; /* set by JS based on backgroundfiles.png rendered height */
@@ -7,8 +7,8 @@
   --return-x: 40px;
   --return-y: 40px;
   --return-w: 180px;
-  --return-opacity-idle: 0;  /* hidden until hover */
-  --return-opacity-hover: 0.5; /* 50% on hover */
+  --return-opacity-idle: 0;     /* hidden until hover */
+  --return-opacity-hover: 0.5;  /* 50% on hover */
 }
 
 html, body{
@@ -55,17 +55,20 @@ body::before{
   z-index: 10;
   text-decoration:none;
   outline:none;
+  cursor: pointer;
 }
 
+/* ✅ force hidden by default */
 .return-btn img{
   width:100%;
   height:auto;
   display:block;
-  opacity: var(--return-opacity-idle);
+  opacity: var(--return-opacity-idle) !important;
   transition: opacity 140ms ease;
 }
 
+/* ✅ show on hover/focus */
 .return-btn:hover img,
 .return-btn:focus-visible img{
-  opacity: var(--return-opacity-hover);
+  opacity: var(--return-opacity-hover) !important;
 }
